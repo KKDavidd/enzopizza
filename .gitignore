@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+admin-cms/node_modules/
+seed/node_modules/
+
+# Build outputs
+dist/
+admin-cms/dist/
+
+# Secrets — never commit service account keys
+seed/serviceAccountKey.json
+*.env
+.env.local
+
+# OS / editor
+.DS_Store
+.vscode/

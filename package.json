@@ -1,0 +1,10 @@
+{
+  "name": "enzopizza-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "node build.js",
+    "dev:site": "npx serve public-site -l 4173",
+    "dev:admin": "npm --prefix admin-cms run dev"
+  }
+}

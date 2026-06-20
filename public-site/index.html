@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enzopizza Hajmáskér — Kézműves pizza, frissensültek</title>
+  <meta name="description" content="Enzopizza Hajmáskér — 32 cm-es pizzák, frissensültek, köretek és desszertek. Rendelj vagy hívj minket: (70) 584 6276." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;500;700&family=Karla:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍕</text></svg>" />
+
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+<body>
+
+  <!-- ===== NAV ===== -->
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a href="#top" class="brand">
+        <span class="brand-mark">EP</span>
+        <span class="brand-name">Enzopizza<br /><small>Hajmáskér</small></span>
+      </a>
+      <nav class="main-nav" aria-label="Fő navigáció">
+        <a href="#menu">Menü</a>
+        <a href="#velemenyek">Vélemények</a>
+        <a href="#nyitvatartas">Nyitvatartás</a>
+        <a href="#kapcsolat">Kapcsolat</a>
+      </nav>
+      <a class="header-cta" id="header-call-link" href="tel:+36705846276">
+        <span class="cta-label">Hívj minket</span>
+        <span class="cta-value">(70) 584 6276</span>
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Menü megnyitása" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="top">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">32 cm · kőlapon sülve · Hajmáskéren</p>
+        <h1 class="hero-title">A tészta<br />itt nem<br /><span class="hero-accent">vicc.</span></h1>
+        <p class="hero-sub">Frissen nyújtott pizzák, ropogós frissensültek és igazi köretek — minden nap, ahogy a faluban kell.</p>
+        <div class="hero-actions">
+          <a href="#menu" class="btn btn-primary">Nézd a menüt</a>
+          <a href="tel:+36705846276" class="btn btn-ghost">Rendelés telefonon</a>
+        </div>
+        <ul class="hero-stats" id="hero-stats">
+          <li><strong id="stat-rating">100%</strong><span>ajánlja</span></li>
+          <li><strong id="stat-reviews">8</strong><span>vélemény</span></li>
+          <li><strong id="open-now-badge">—</strong><span id="open-now-label">nyitvatartás</span></li>
+        </ul>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-photo torn-edge">
+          <img src="assets/hero-pizza.jpg" alt="" id="hero-photo-img" onerror="this.style.display='none'" />
+        </div>
+        <div class="hero-photo-tag">Ma sült</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MENU ===== -->
+  <main>
+    <section class="menu-section" id="menu">
+      <div class="section-head">
+        <p class="eyebrow">A teljes kínálat</p>
+        <h2>Menü</h2>
+        <p class="section-sub">Az árak forintban értendők és tartalmazzák az ÁFA-t. Az árváltozás jogát fenntartjuk.</p>
+      </div>
+
+      <div class="menu-tabs" id="menu-tabs" role="tablist" aria-label="Menü kategóriák"></div>
+
+      <div class="menu-loading" id="menu-loading">
+        <div class="loader-crumb"></div>
+        <p>A menü betöltése…</p>
+      </div>
+
+      <div class="menu-content" id="menu-content" hidden></div>
+
+      <div class="menu-empty" id="menu-empty" hidden>
+        <p>A menü jelenleg nem érhető el. Próbáld újra később, vagy hívj minket telefonon.</p>
+      </div>
+
+      <div class="allergen-key" id="allergen-key">
+        <p class="allergen-title">Allergének</p>
+        <ul id="allergen-list"></ul>
+      </div>
+    </section>
+
+    <!-- ===== REVIEWS ===== -->
+    <section class="reviews-section" id="velemenyek">
+      <div class="section-head">
+        <p class="eyebrow">Mit mondanak rólunk</p>
+        <h2>Vélemények</h2>
+      </div>
+      <div class="reviews-summary">
+        <div class="reviews-score" id="reviews-score">
+          <strong id="reviews-score-value">100%</strong>
+          <span>ajánlja</span>
+        </div>
+        <p id="reviews-count-label">8 vélemény alapján</p>
+      </div>
+      <div class="reviews-grid" id="reviews-grid"></div>
+    </section>
+
+    <!-- ===== HOURS + CONTACT ===== -->
+    <section class="info-section" id="nyitvatartas">
+      <div class="info-grid">
+        <div class="hours-card">
+          <p class="eyebrow">Mikor vagyunk nyitva</p>
+          <h2>Nyitvatartás</h2>
+          <table class="hours-table" id="hours-table">
+            <tbody></tbody>
+          </table>
+          <p class="hours-now" id="hours-now-text"></p>
+        </div>
+
+        <div class="contact-card" id="kapcsolat">
+          <p class="eyebrow">Gyere el, vagy hívj</p>
+          <h2>Kapcsolat</h2>
+          <ul class="contact-list">
+            <li>
+              <span class="contact-icon" aria-hidden="true">📍</span>
+              <a id="contact-address" href="#" target="_blank" rel="noopener">Cím betöltése…</a>
+            </li>
+            <li>
+              <span class="contact-icon" aria-hidden="true">📞</span>
+              <a id="contact-phone" href="#">Telefon betöltése…</a>
+            </li>
+            <li>
+              <span class="contact-icon" aria-hidden="true">✉️</span>
+              <a id="contact-email" href="#">Email betöltése…</a>
+            </li>
+            <li>
+              <span class="contact-icon" aria-hidden="true">💬</span>
+              <a id="contact-messenger" href="#" target="_blank" rel="noopener">Messenger</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="brand">
+        <span class="brand-mark">EP</span>
+        <span class="brand-name">Enzopizza<br /><small>Hajmáskér</small></span>
+      </div>
+      <p class="footer-note" id="footer-address">Jókai Mór ltp. 9., Hajmáskér, 8192</p>
+      <p class="footer-legal">© <span id="footer-year"></span> Enzopizza Hajmáskér. Minden jog fenntartva.</p>
+    </div>
+  </footer>
+
+  <!-- Firebase SDK (modular, v10) -->
+  <script type="module" src="js/firebase-config.js"></script>
+  <script type="module" src="js/menu.js"></script>
+  <script type="module" src="js/info.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

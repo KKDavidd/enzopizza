@@ -1,0 +1,27 @@
+{
+  "name": "enzopizza-admin-cms",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@firecms/core": "^3.0.0",
+    "@firecms/firebase": "^3.0.0",
+    "@firecms/ui": "^3.0.0",
+    "firebase": "^10.12.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.24.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "typescript": "^5.5.2",
+    "vite": "^5.3.1"
+  }
+}

@@ -1,0 +1,195 @@
+/* ============================================================
+   ENZOPIZZA HAJMÁSKÉR — components.css
+   Menu tabs, item cards, review cards, mobile nav
+   ============================================================ */
+
+/* ===== MENU TABS ===== */
+.tab-btn {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-cream-dim);
+  background: transparent;
+  border: 1px solid var(--color-char-line);
+  border-radius: 999px;
+  padding: 0.55rem 1.2rem;
+  transition: all 0.18s var(--ease-out);
+}
+.tab-btn:hover {
+  border-color: var(--color-cheese);
+  color: var(--color-cream);
+}
+.tab-btn[aria-selected="true"] {
+  background: var(--color-tomato);
+  border-color: var(--color-tomato);
+  color: var(--color-paper);
+}
+
+/* ===== MENU CATEGORY GROUP ===== */
+.menu-group {
+  margin-bottom: 3.5rem;
+}
+.menu-group-title {
+  font-size: var(--fs-h3);
+  color: var(--color-cream);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--color-char-line);
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+.menu-group-title::after {
+  content: '';
+  flex: 1;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+/* ===== MENU ITEM CARD ===== */
+.menu-item {
+  background: var(--color-char-soft);
+  border: 1px solid var(--color-char-line);
+  border-radius: var(--radius-md);
+  padding: 1.4rem 1.5rem;
+  transition: border-color 0.18s var(--ease-out), transform 0.18s var(--ease-out);
+}
+.menu-item:hover {
+  border-color: var(--color-cheese);
+  transform: translateY(-2px);
+}
+
+.menu-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.menu-item-name {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--color-cream);
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.menu-item-allergens {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-cheese);
+  font-weight: 500;
+}
+
+.menu-item-price {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--color-tomato);
+  white-space: nowrap;
+  font-size: 1rem;
+}
+
+.menu-item-desc {
+  margin-top: 0.5rem;
+  color: var(--color-cream-dim);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.menu-item-tags {
+  margin-top: 0.7rem;
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.menu-item-tag {
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(201, 154, 75, 0.14);
+  color: var(--color-cheese);
+}
+
+/* ===== REVIEW CARD ===== */
+.review-card {
+  background: var(--color-char);
+  border: 1px solid var(--color-char-line);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+}
+.review-head {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.85rem;
+}
+.review-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--color-tomato);
+  color: var(--color-paper);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+.review-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.review-recommend {
+  font-size: 0.72rem;
+  color: var(--color-cheese);
+  font-family: var(--font-mono);
+}
+.review-text {
+  color: var(--color-cream-dim);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+/* ===== MOBILE NAV DRAWER ===== */
+.nav-toggle.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.is-open span:nth-child(2) { opacity: 0; }
+.nav-toggle.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.nav-toggle span { transition: transform 0.2s var(--ease-out), opacity 0.2s var(--ease-out); }
+
+@media (max-width: 900px) {
+  .main-nav.is-open {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    background: var(--color-char);
+    border-bottom: 1px solid var(--color-char-line);
+    padding: 1.5rem var(--gutter) 2rem;
+    gap: 1.25rem;
+    z-index: 49;
+  }
+  .main-nav.is-open a { font-size: 1.05rem; }
+}
+
+/* ===== ANIMATIONS: fade-up on load ===== */
+.menu-group, .review-card {
+  animation: fadeUp 0.5s var(--ease-out) both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}

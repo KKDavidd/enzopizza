@@ -1,0 +1,11 @@
+{
+  "name": "enzopizza-seed",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "seed": "node seed.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.3.0"
+  }
+}
