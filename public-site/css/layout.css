@@ -245,6 +245,9 @@
   padding: 3rem 0;
   color: var(--color-cream-dim);
 }
+.menu-loading[hidden] {
+  display: none;
+}
 .loader-crumb {
   width: 34px;
   height: 34px;

@@ -226,5 +226,4 @@ admin-cms/
       CategoriesPage.tsx
       ReviewsPage.tsx
       SettingsPage.tsx
-.
 ```
