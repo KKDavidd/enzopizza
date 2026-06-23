@@ -10,10 +10,10 @@ rules_version = '2';
 //
 // Model:
 //   - Anyone can READ menu/settings/review data (public site).
-//   - Only signed-in users (the admin, via FireCMS) can WRITE.
+//   - Only signed-in users (the admin app) can WRITE.
 //   - Tighten further with custom claims / an allow-list of
-//     admin UIDs if you want defense-in-depth beyond the CMS's
-//     own ALLOWED_EMAILS check.
+//     admin UIDs if you want defense-in-depth beyond the admin
+//     app's own ALLOWED_EMAILS-style check (if you add one).
 // ============================================================
 
 service cloud.firestore {

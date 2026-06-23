@@ -3,7 +3,7 @@
 //
 // One-time helper that populates categories, products, settings
 // and reviews with the data from the original paper menu, so
-// you don't have to type ~25 products by hand in FireCMS.
+// you don't have to type ~25 products by hand in the admin app.
 //
 // Usage:
 //   1. npm install firebase-admin

@@ -1,132 +1,80 @@
 // ============================================================
 // ENZOPIZZA HAJMÁSKÉR — Admin CMS
-// Root FireCMS app (self-hosted, FireCMS v3 / @firecms/core).
-//
-// Auth: email/password only. Add admin users in the Firebase
-// Console → Authentication → Users tab (Email/Password provider).
-// Optionally restrict access further with ALLOWED_EMAILS below.
+// Root app: auth gate + sidebar navigation + page switching.
+// No router library — a tiny admin with 4 pages doesn't need one,
+// and it's one less dependency that could break the build.
 // ============================================================
 
-import {
-    AppBar,
-    CircularProgressCenter,
-    Drawer,
-    FireCMS,
-    ModeControllerProvider,
-    NavigationRoutes,
-    Scaffold,
-    SideDialogs,
-    SnackbarProvider,
-    useBuildLocalConfigurationPersistence,
-    useBuildModeController,
-    useBuildNavigationController,
-    useValidateAuthenticator
-} from "@firecms/core";
-import {
-    FirebaseAuthController,
-    FirebaseLoginView,
-    useFirebaseAuthController,
-    useFirebaseStorageSource,
-    useFirestoreDelegate,
-    useInitialiseFirebase
-} from "@firecms/firebase";
+import { useState } from "react";
+import { signOut } from "firebase/auth";
+import { auth } from "./lib/firebase";
+import { useAuth } from "./lib/useAuth";
+import { LoginPage } from "./pages/LoginPage";
+import { CategoriesPage } from "./pages/CategoriesPage";
+import { ProductsPage } from "./pages/ProductsPage";
+import { ReviewsPage } from "./pages/ReviewsPage";
+import { SettingsPage } from "./pages/SettingsPage";
 
-import { firebaseConfig } from "./firebaseConfig";
-import { collections } from "./collections";
+type PageKey = "products" | "categories" | "reviews" | "settings";
 
-// Leave empty to allow any user that exists in Firebase Auth.
-// Add specific emails to restrict admin access to just those accounts.
-const ALLOWED_EMAILS: string[] = [
-    // "owner@enzopizza.hu",
+const NAV_ITEMS: { key: PageKey; label: string; icon: string }[] = [
+  { key: "products", label: "Termékek", icon: "🍕" },
+  { key: "categories", label: "Kategóriák", icon: "📂" },
+  { key: "reviews", label: "Vélemények", icon: "⭐" },
+  { key: "settings", label: "Beállítások", icon: "⚙️" }
 ];
 
+function Shell() {
+  const { user } = useAuth();
+  const [page, setPage] = useState<PageKey>("products");
+
+  return (
+    <div className="app-shell">
+      <aside className="sidebar">
+        <div className="sidebar-brand">
+          <div className="sidebar-brand-mark">EP</div>
+          <div className="sidebar-brand-name">
+            Enzopizza
+            <small>ADMIN · HAJMÁSKÉR</small>
+          </div>
+        </div>
+        <nav className="sidebar-nav">
+          {NAV_ITEMS.map((item) => (
+            <button
+              key={item.key}
+              className={page === item.key ? "active" : ""}
+              onClick={() => setPage(item.key)}
+            >
+              <span aria-hidden="true">{item.icon}</span> {item.label}
+            </button>
+          ))}
+        </nav>
+        <div className="sidebar-footer">
+          {user?.email && <p className="sidebar-user">{user.email}</p>}
+          <button className="btn-logout" onClick={() => signOut(auth)}>Kijelentkezés</button>
+        </div>
+      </aside>
+
+      <main className="main">
+        {page === "products" && <ProductsPage />}
+        {page === "categories" && <CategoriesPage />}
+        {page === "reviews" && <ReviewsPage />}
+        {page === "settings" && <SettingsPage />}
+      </main>
+    </div>
+  );
+}
+
 export default function App() {
-    const modeController = useBuildModeController();
+  const { user, loading } = useAuth();
 
-    const { firebaseApp, firebaseConfigLoading, configError } = useInitialiseFirebase({
-        firebaseConfig
-    });
+  if (loading) {
+    return <div className="center-screen">Betöltés…</div>;
+  }
 
-    const authController: FirebaseAuthController = useFirebaseAuthController({
-        firebaseApp,
-        signInOptions: ["password"]
-    });
+  if (!user) {
+    return <LoginPage />;
+  }
 
-    const firestoreDelegate = useFirestoreDelegate({ firebaseApp: firebaseApp! });
-
-    // Required by the <FireCMS> component's props, but never actually
-    // invoked: no collection field below uses a `storage:` config, so
-    // nothing ever calls Firebase Storage. You do NOT need to enable
-    // Storage in the Firebase Console for this app to work — image
-    // fields use plain URL text inputs instead (see collections/).
-    const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp! });
-
-    const navigationController = useBuildNavigationController({
-        collections,
-        authController,
-        dataSourceDelegate: firestoreDelegate
-    });
-
-    const configPersistence = useBuildLocalConfigurationPersistence();
-
-    const { authLoading, canAccessMainView, notAllowedError } = useValidateAuthenticator({
-        authController,
-        authenticator: async ({ user }) => {
-            if (ALLOWED_EMAILS.length === 0) return true;
-            if (!user?.email || !ALLOWED_EMAILS.includes(user.email)) {
-                throw Error("Ehhez a fiókhoz nincs admin jogosultság.");
-            }
-            return true;
-        },
-        dataSourceDelegate: firestoreDelegate
-    });
-
-    if (firebaseConfigLoading || !firebaseApp) {
-        return <CircularProgressCenter />;
-    }
-
-    if (configError) {
-        return <div style={{ padding: 24 }}>{configError}</div>;
-    }
-
-    return (
-        <SnackbarProvider>
-            <ModeControllerProvider value={modeController}>
-                <FireCMS
-                    navigationController={navigationController}
-                    authController={authController}
-                    userConfigPersistence={configPersistence}
-                    dataSourceDelegate={firestoreDelegate}
-                    storageSource={storageSource}
-                >
-                    {({ context, loading }) => {
-                        if (loading || authLoading) {
-                            return <CircularProgressCenter />;
-                        }
-
-                        if (!canAccessMainView) {
-                            return (
-                                <FirebaseLoginView
-                                    authController={authController}
-                                    firebaseApp={firebaseApp}
-                                    signInOptions={["password"]}
-                                    notAllowedError={notAllowedError}
-                                    logo="/admin-logo.svg"
-                                />
-                            );
-                        }
-
-                        return (
-                            <Scaffold autoOpenDrawer={false}>
-                                <AppBar title="Enzopizza — Admin" />
-                                <Drawer />
-                                <NavigationRoutes />
-                                <SideDialogs />
-                            </Scaffold>
-                        );
-                    }}
-                </FireCMS>
-            </ModeControllerProvider>
-        </SnackbarProvider>
-    );
+  return <Shell />;
 }

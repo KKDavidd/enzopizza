@@ -4,7 +4,7 @@
 // Vercel build command: `npm run build` (this file).
 // Produces a single output directory `dist/` containing:
 //   dist/                  <- the static public site (public-site/*)
-//   dist/admin/             <- the built FireCMS admin SPA
+//   dist/admin/             <- the built admin CMS SPA
 //
 // This lets one Vercel project serve both the public site at
 // the domain root and the CMS at {domain}/admin, with a single
@@ -34,7 +34,7 @@ function copyDir(src, dest) {
   }
 }
 
-console.log("→ Installing & building admin-cms (FireCMS)...");
+console.log("→ Installing & building admin-cms...");
 execSync("npm install", { cwd: adminDir, stdio: "inherit" });
 execSync("npm run build", { cwd: adminDir, stdio: "inherit" });
 
