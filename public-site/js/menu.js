@@ -125,13 +125,25 @@ async function loadCategories() {
 }
 
 async function loadProducts() {
-  const q = query(
-    collection(db, "products"),
-    where("active", "==", true),
-    orderBy("order", "asc")
-  );
-  const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  try {
+    // Try the composite-index query first (active==true + orderBy order)
+    const q = query(
+      collection(db, "products"),
+      where("active", "==", true),
+      orderBy("order", "asc")
+    );
+    const snap = await getDocs(q);
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (err) {
+    // Composite index may not be deployed yet — fall back to fetching all
+    // products and filtering client-side so the page still works.
+    console.warn("Összetett index hiányzik, kliens oldali szűrés használata:", err);
+    const q = query(collection(db, "products"), orderBy("order", "asc"));
+    const snap = await getDocs(q);
+    return snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(p => p.active !== false);
+  }
 }
 
 function buildMenuDOM(categories, productsByCategory) {
@@ -215,6 +227,7 @@ export async function initMenu() {
   } catch (err) {
     console.error("Menü betöltési hiba:", err);
     loadingNode.hidden = true;
+    if (contentNode) contentNode.hidden = true;
     emptyNode.hidden = false;
   }
 }
