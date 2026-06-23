@@ -224,7 +224,7 @@ export async function initMenu() {
 
     loadingNode.hidden = true;
     contentNode.hidden = false;
-} catch (err) {
+  } catch (err) {
     console.error("Menü betöltési hiba:", err);
     loadingNode.hidden = true;
     if (contentNode) contentNode.hidden = true;
