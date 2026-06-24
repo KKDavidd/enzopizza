@@ -4,11 +4,13 @@
 // else in the admin app via these shared exports.
 // ============================================================
 
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { firebaseConfig } from "../firebaseConfig";
 
-export const firebaseApp = initializeApp(firebaseConfig);
+export const firebaseApp = getApps().length === 0
+  ? initializeApp(firebaseConfig)
+  : getApp();
 export const auth = getAuth(firebaseApp);
 export const db = getFirestore(firebaseApp);
