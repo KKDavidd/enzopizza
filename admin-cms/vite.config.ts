@@ -4,14 +4,20 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   base: "/admin/",
   plugins: [react()],
-  server: {
-    port: 5173
-  },
+  server: { port: 5173 },
   build: {
     outDir: "dist",
-    sourcemap: false
+    sourcemap: false,
+    commonjsOptions: { include: [] }
+  },
+  optimizeDeps: {
+    include: [
+      "firebase/app",
+      "firebase/auth",
+      "firebase/firestore"
+    ]
   },
   resolve: {
-    dedupe: ["firebase", "firebase/app", "firebase/auth", "firebase/firestore"]
+    dedupe: ["firebase/app", "firebase/auth", "firebase/firestore"]
   }
 });

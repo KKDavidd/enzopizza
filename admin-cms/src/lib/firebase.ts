@@ -1,11 +1,10 @@
 // ============================================================
-// ENZOPIZZA HAJMÁSKÉR — Admin CMS
-// Firebase initialization — single module, lazy Firestore.
+// ENZOPIZZA HAJMÁSKÉR — Admin CMS — Firebase init
 // ============================================================
 
-import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
-import { getAuth, type Auth } from "firebase/auth";
-import { getFirestore, type Firestore } from "firebase/firestore";
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCLTLuVFG36zXOzF1YkrPm2hr4k8hRFwHI",
@@ -16,34 +15,11 @@ const firebaseConfig = {
   appId: "1:788231794322:web:f2203afd0320954371004b"
 };
 
-let _app: FirebaseApp;
-let _auth: Auth;
-let _db: Firestore;
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-function getFirebaseApp(): FirebaseApp {
-  if (!_app) {
-    _app = getApps().length === 0
-      ? initializeApp(firebaseConfig)
-      : getApp();
-  }
-  return _app;
-}
+// Both must be called immediately after app init, in the same module,
+// so Vite does not tree-shake away the Firestore component registration.
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-export function getFirebaseAuth(): Auth {
-  if (!_auth) {
-    _auth = getAuth(getFirebaseApp());
-  }
-  return _auth;
-}
-
-export function getFirebaseDb(): Firestore {
-  if (!_db) {
-    _db = getFirestore(getFirebaseApp());
-  }
-  return _db;
-}
-
-// Convenience exports for direct import
-export const app = getFirebaseApp();
-export const auth = getFirebaseAuth();
-export const db = getFirebaseDb();
+export { app, auth, db };
