@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Enzopizza — Admin</title>
+  <style>
+/* ============================================================
+   ENZOPIZZA HAJMÁSKÉR — Admin CMS styles
+   ============================================================ */
+:root {
+  --color-char: #0E0C0A;
+  --color-char-soft: #1C1815;
+  --color-char-line: #2C2620;
+  --color-cream: #F5EFE4;
+  --color-cream-dim: #A9A092;
+  --color-tomato: #C8472E;
+  --color-tomato-dim: #9C3722;
+  --color-cheese: #C99A4B;
+  --color-green: #4F9D5D;
+  --radius: 8px;
+  --font-body: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, monospace;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--color-char); color: var(--color-cream); font-family: var(--font-body); font-size: 14px; line-height: 1.5; }
+button { font-family: inherit; cursor: pointer; }
+input, select, textarea { font-family: inherit; font-size: inherit; color: var(--color-cream); background: var(--color-char); border: 1px solid var(--color-char-line); border-radius: 6px; padding: 0.5rem 0.65rem; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--color-cheese); }
+.app-shell { display: flex; min-height: 100vh; }
+.sidebar { width: 220px; flex-shrink: 0; background: var(--color-char-soft); border-right: 1px solid var(--color-char-line); display: flex; flex-direction: column; padding: 1.25rem 0; }
+.sidebar-brand { display: flex; align-items: center; gap: 0.6rem; padding: 0 1.25rem 1.25rem; border-bottom: 1px solid var(--color-char-line); margin-bottom: 1rem; }
+.sidebar-brand-mark { width: 34px; height: 34px; border-radius: 50%; background: var(--color-tomato); display: grid; place-items: center; font-weight: 800; font-size: 0.85rem; flex-shrink: 0; }
+.sidebar-brand-name { font-weight: 700; font-size: 0.95rem; line-height: 1.2; }
+.sidebar-brand-name small { display: block; font-weight: 400; font-size: 0.7rem; color: var(--color-cream-dim); }
+.sidebar-nav { display: flex; flex-direction: column; gap: 0.2rem; padding: 0 0.6rem; }
+.sidebar-nav button { text-align: left; background: none; border: none; color: var(--color-cream-dim); padding: 0.65rem 0.7rem; border-radius: 6px; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.55rem; }
+.sidebar-nav button:hover { background: var(--color-char-line); color: var(--color-cream); }
+.sidebar-nav button.active { background: var(--color-tomato); color: white; }
+.sidebar-footer { margin-top: auto; padding: 0 1.25rem; }
+.sidebar-user { font-size: 0.78rem; color: var(--color-cream-dim); margin-bottom: 0.6rem; word-break: break-all; }
+.btn-logout { width: 100%; background: none; border: 1px solid var(--color-char-line); color: var(--color-cream-dim); padding: 0.5rem; border-radius: 6px; font-size: 0.82rem; font-weight: 600; }
+.btn-logout:hover { border-color: var(--color-tomato); color: var(--color-tomato); }
+.main { flex: 1; padding: 2rem 2.5rem; max-width: 1200px; overflow-x: auto; }
+.page-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem; }
+.page-head h1 { font-size: 1.5rem; margin: 0; }
+.page-sub { color: var(--color-cream-dim); font-size: 0.85rem; margin-top: 0.2rem; }
+.btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1rem; border-radius: 6px; border: 1px solid transparent; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+.btn-primary { background: var(--color-tomato); color: white; }
+.btn-primary:hover { background: #d6512f; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.table-wrap { overflow-x: auto; border: 1px solid var(--color-char-line); border-radius: var(--radius); }
+table.data-table { width: 100%; border-collapse: collapse; background: var(--color-char-soft); }
+.data-table th { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-cream-dim); padding: 0.7rem 0.85rem; border-bottom: 1px solid var(--color-char-line); white-space: nowrap; }
+.data-table td { padding: 0.45rem 0.85rem; border-bottom: 1px solid var(--color-char-line); vertical-align: middle; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover { background: rgba(255,255,255,0.02); }
+.cell-input { width: 100%; background: transparent; border: 1px solid transparent; border-radius: 4px; padding: 0.4rem 0.5rem; color: var(--color-cream); }
+.cell-input:hover { border-color: var(--color-char-line); }
+.cell-input:focus { background: var(--color-char); border-color: var(--color-cheese); outline: none; }
+.cell-price { width: 100px; font-family: var(--font-mono); }
+.cell-order { width: 60px; font-family: var(--font-mono); text-align: center; }
+.cell-name { min-width: 160px; }
+.cell-desc { min-width: 220px; }
+.cell-allergens { width: 150px; }
+.cell-checkbox { width: 60px; text-align: center; }
+.cell-actions { width: 50px; text-align: center; }
+.row-inactive { opacity: 0.45; }
+.allergen-chips { display: flex; flex-wrap: wrap; gap: 3px; max-width: 220px; }
+.allergen-chip { font-family: var(--font-mono); font-size: 0.68rem; padding: 1px 5px; border-radius: 999px; background: rgba(201,154,75,0.16); color: var(--color-cheese); border: none; cursor: pointer; }
+.allergen-chip.active { background: var(--color-cheese); color: var(--color-char); font-weight: 700; }
+.icon-btn { background: none; border: none; color: var(--color-cream-dim); font-size: 1rem; padding: 0.3rem; border-radius: 4px; line-height: 1; cursor: pointer; }
+.icon-btn:hover { color: var(--color-tomato); background: rgba(200,71,46,0.1); }
+select.cell-input { appearance: none; }
+.toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 1rem; flex-wrap: wrap; }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; background: var(--color-char-soft); border: 1px solid var(--color-char-line); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; }
+.form-field { display: flex; flex-direction: column; gap: 0.35rem; }
+.form-field label { font-size: 0.78rem; font-weight: 700; color: var(--color-cream-dim); }
+.form-field input { width: 100%; }
+.hours-row { display: grid; grid-template-columns: 90px 1fr 1fr auto; gap: 0.6rem; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--color-char-line); }
+.hours-row:last-child { border-bottom: none; }
+.hours-day-label { font-weight: 700; }
+.hours-closed-toggle { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--color-cream-dim); white-space: nowrap; }
+.save-status { font-size: 0.78rem; font-family: var(--font-mono); color: var(--color-cream-dim); min-height: 1.2em; }
+.save-status.saved { color: var(--color-green); }
+.save-status.saving { color: var(--color-cheese); }
+.save-status.error { color: var(--color-tomato); }
+.login-screen { min-height: 100vh; display: grid; place-items: center; background: var(--color-char); padding: 1.5rem; }
+.login-card { width: 100%; max-width: 360px; background: var(--color-char-soft); border: 1px solid var(--color-char-line); border-radius: 12px; padding: 2rem; }
+.login-card h1 { font-size: 1.2rem; margin: 0 0 0.3rem; }
+.login-card .page-sub { margin-bottom: 1.5rem; }
+.login-field { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.login-field label { font-size: 0.8rem; font-weight: 700; color: var(--color-cream-dim); }
+.login-field input { width: 100%; }
+.login-error { background: rgba(200,71,46,0.12); border: 1px solid var(--color-tomato-dim); color: var(--color-tomato); padding: 0.6rem 0.8rem; border-radius: 6px; font-size: 0.82rem; margin-bottom: 1rem; }
+.login-submit { width: 100%; justify-content: center; margin-top: 0.5rem; }
+.center-screen { min-height: 100vh; display: grid; place-items: center; color: var(--color-cream-dim); }
+.empty-state { text-align: center; padding: 3rem 1rem; color: var(--color-cream-dim); }
+h2 { font-size: 1rem; margin-bottom: 0.75rem; }
+@media (max-width: 800px) {
+  .app-shell { flex-direction: column; }
+  .sidebar { width: 100%; flex-direction: row; align-items: center; padding: 0.75rem 1rem; overflow-x: auto; }
+  .sidebar-brand { border: none; padding: 0; margin: 0 1rem 0 0; }
+  .sidebar-nav { flex-direction: row; padding: 0; }
+  .sidebar-footer { display: none; }
+  .main { padding: 1.25rem; }
+}
+  </style>
+</head>
+<body>
+<div id="root"><div class="center-screen">Betöltés…</div></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "firebase/app": "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js",
+    "firebase/auth": "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js",
+    "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js",
+    "react": "https://esm.sh/react@18.3.1",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client"
+  }
+}
+</script>
+
+<script type="module">
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, setDoc, onSnapshot, query, orderBy } from "firebase/firestore";
+import { useState, useEffect, createElement as h } from "react";
+import { createRoot } from "react-dom/client";
+
+// ── Firebase init ────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyCLTLuVFG36zXOzF1YkrPm2hr4k8hRFwHI",
+  authDomain: "enzohajm.firebaseapp.com",
+  projectId: "enzohajm",
+  storageBucket: "enzohajm.firebasestorage.app",
+  messagingSenderId: "788231794322",
+  appId: "1:788231794322:web:f2203afd0320954371004b"
+};
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ── Constants ────────────────────────────────────────────────
+const ALLERGEN_LEGEND = {1:"Glutén",2:"Rákfélék",3:"Tojás",4:"Hal",5:"Földimogyoró",6:"Szójabab",7:"Tej",8:"Diófélék",9:"Zeller",10:"Mustár",11:"Szezámmag",12:"Kéndioxid",13:"Csillagfürt",14:"Puhatestűek",15:"Méz"};
+const DAY_KEYS = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
+const DAY_LABELS = {monday:"Hétfő",tuesday:"Kedd",wednesday:"Szerda",thursday:"Csütörtök",friday:"Péntek",saturday:"Szombat",sunday:"Vasárnap"};
+const ERROR_MESSAGES = {"auth/invalid-credential":"Hibás email cím vagy jelszó.","auth/invalid-email":"Érvénytelen email cím.","auth/user-disabled":"Ez a fiók le van tiltva.","auth/too-many-requests":"Túl sok próbálkozás. Várj egy kicsit."};
+
+// ── Hooks ────────────────────────────────────────────────────
+function useAuth() {
+  const [user, setUser] = useState(undefined);
+  useEffect(() => onAuthStateChanged(auth, setUser), []);
+  return { user, loading: user === undefined };
+}
+
+function useCollection(path, orderField = "order") {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    setLoading(true);
+    const q = query(collection(db, path), orderBy(orderField, "asc"));
+    return onSnapshot(q,
+      snap => { setItems(snap.docs.map(d => ({id: d.id, ...d.data()}))); setLoading(false); setError(null); },
+      err => { setError(err.message); setLoading(false); }
+    );
+  }, [path, orderField]);
+  const addItem = data => addDoc(collection(db, path), data);
+  const updateItem = (id, patch) => updateDoc(doc(db, path, id), patch);
+  const removeItem = id => deleteDoc(doc(db, path, id));
+  return { items, loading, error, addItem, updateItem, removeItem };
+}
+
+function useDocument(path, id) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    setLoading(true);
+    return onSnapshot(doc(db, path, id),
+      snap => { setData(snap.exists() ? snap.data() : null); setLoading(false); },
+      err => { setError(err.message); setLoading(false); }
+    );
+  }, [path, id]);
+  const save = patch => setDoc(doc(db, path, id), patch, { merge: true });
+  return { data, loading, error, save };
+}
+
+// ── Cell components ──────────────────────────────────────────
+function TextCell({ value, onSave, placeholder, className }) {
+  const [draft, setDraft] = useState(value ?? "");
+  useEffect(() => setDraft(value ?? ""), [value]);
+  return h("input", { className: `cell-input ${className ?? ""}`, value: draft, placeholder,
+    onChange: e => setDraft(e.target.value),
+    onBlur: () => { if (draft !== value) onSave(draft); },
+    onKeyDown: e => { if (e.key === "Enter") e.target.blur(); }
+  });
+}
+
+function NumberCell({ value, onSave, className, min }) {
+  const [draft, setDraft] = useState(String(value ?? ""));
+  useEffect(() => setDraft(String(value ?? "")), [value]);
+  return h("input", { type: "number", className: `cell-input ${className ?? ""}`, value: draft, min,
+    onChange: e => setDraft(e.target.value),
+    onBlur: () => { const n = Number(draft); if (!isNaN(n) && n !== value) onSave(n); },
+    onKeyDown: e => { if (e.key === "Enter") e.target.blur(); }
+  });
+}
+
+function CheckboxCell({ checked, onSave }) {
+  return h("input", { type: "checkbox", checked: !!checked, onChange: e => onSave(e.target.checked) });
+}
+
+function SelectCell({ value, options, onSave }) {
+  return h("select", { className: "cell-input", value, onChange: e => onSave(e.target.value) },
+    ...options.map(opt => h("option", { key: opt.value, value: opt.value }, opt.label))
+  );
+}
+
+function AllergenChipsCell({ selected, onSave }) {
+  const set = new Set(selected ?? []);
+  const toggle = code => { const n = new Set(set); n.has(code) ? n.delete(code) : n.add(code); onSave([...n].sort((a,b)=>a-b)); };
+  return h("div", { className: "allergen-chips" },
+    ...Object.entries(ALLERGEN_LEGEND).map(([c, label]) => {
+      const code = Number(c);
+      return h("button", { key: code, type: "button", className: `allergen-chip ${set.has(code) ? "active" : ""}`, title: label, onClick: () => toggle(code) }, code);
+    })
+  );
+}
+
+// ── Pages ────────────────────────────────────────────────────
+function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError(null); setSubmitting(true);
+    try { await signInWithEmailAndPassword(auth, email.trim(), password); }
+    catch (err) { setError(ERROR_MESSAGES[err?.code] ?? "Bejelentkezési hiba. Próbáld újra."); }
+    finally { setSubmitting(false); }
+  }
+
+  return h("div", { className: "login-screen" },
+    h("div", { className: "login-card" },
+      h("h1", null, "Enzopizza — Admin"),
+      h("p", { className: "page-sub" }, "Jelentkezz be a menü szerkesztéséhez."),
+      error && h("div", { className: "login-error" }, error),
+      h("form", { onSubmit: handleSubmit },
+        h("div", { className: "login-field" },
+          h("label", null, "Email"),
+          h("input", { type: "email", required: true, autoComplete: "username", value: email, onChange: e => setEmail(e.target.value) })
+        ),
+        h("div", { className: "login-field" },
+          h("label", null, "Jelszó"),
+          h("input", { type: "password", required: true, autoComplete: "current-password", value: password, onChange: e => setPassword(e.target.value) })
+        ),
+        h("button", { type: "submit", className: "btn btn-primary login-submit", disabled: submitting }, submitting ? "Bejelentkezés…" : "Bejelentkezés")
+      )
+    )
+  );
+}
+
+function ProductsPage() {
+  const { items: categories } = useCollection("categories");
+  const { items: products, loading, error, addItem, updateItem, removeItem } = useCollection("products");
+  const catOptions = categories.map(c => ({ value: c.id, label: c.name }));
+
+  async function handleAdd() {
+    await addItem({ name: "Új termék", description: "", price: 0, categoryId: categories[0]?.id ?? "", allergens: [], order: (products.length ? Math.max(...products.map(p => p.order ?? 0)) : 0) + 1, active: true });
+  }
+
+  if (loading) return h("p", { className: "empty-state" }, "Betöltés…");
+
+  return h("div", null,
+    h("div", { className: "page-head" }, h("div", null, h("h1", null, "Termékek"), h("p", { className: "page-sub" }, "A menü összes étele. Kattints a cellába a szerkesztéshez."))),
+    error && h("p", { className: "login-error" }, "Hiba: ", error),
+    h("div", { className: "toolbar" },
+      h("span", { className: "page-sub" }, products.length + " termék"),
+      h("button", { className: "btn btn-primary", onClick: handleAdd, disabled: categories.length === 0 }, "+ Új termék")
+    ),
+    products.length === 0
+      ? h("p", { className: "empty-state" }, "Még nincs termék. Kattints a \"+ Új termék\" gombra.")
+      : h("div", { className: "table-wrap" },
+          h("table", { className: "data-table" },
+            h("thead", null, h("tr", null,
+              h("th", { className: "cell-order" }, "Sorrend"),
+              h("th", { className: "cell-name" }, "Név"),
+              h("th", null, "Kategória"),
+              h("th", { className: "cell-desc" }, "Leírás"),
+              h("th", { className: "cell-price" }, "Ár (Ft)"),
+              h("th", { className: "cell-allergens" }, "Allergének"),
+              h("th", { className: "cell-checkbox" }, "Aktív"),
+              h("th", { className: "cell-actions" })
+            )),
+            h("tbody", null, ...products.map(p =>
+              h("tr", { key: p.id, className: p.active ? "" : "row-inactive" },
+                h("td", null, h(NumberCell, { className: "cell-order", value: p.order, onSave: v => updateItem(p.id, { order: v }) })),
+                h("td", null, h(TextCell, { className: "cell-name", value: p.name, onSave: v => updateItem(p.id, { name: v }) })),
+                h("td", null, catOptions.length ? h(SelectCell, { value: p.categoryId, options: catOptions, onSave: v => updateItem(p.id, { categoryId: v }) }) : p.categoryId),
+                h("td", null, h(TextCell, { className: "cell-desc", value: p.description ?? "", placeholder: "Összetevők…", onSave: v => updateItem(p.id, { description: v }) })),
+                h("td", null, h(NumberCell, { className: "cell-price", value: p.price, min: 0, onSave: v => updateItem(p.id, { price: v }) })),
+                h("td", null, h(AllergenChipsCell, { selected: p.allergens ?? [], onSave: v => updateItem(p.id, { allergens: v }) })),
+                h("td", { className: "cell-checkbox" }, h(CheckboxCell, { checked: p.active, onSave: v => updateItem(p.id, { active: v }) })),
+                h("td", { className: "cell-actions" }, h("button", { className: "icon-btn", title: "Törlés", onClick: () => { if(confirm(`Törlöd: "${p.name}"?`)) removeItem(p.id); } }, "✕"))
+              )
+            ))
+          )
+        )
+  );
+}
+
+function CategoriesPage() {
+  const { items, loading, error, addItem, updateItem, removeItem } = useCollection("categories");
+
+  async function handleAdd() {
+    await addItem({ name: "Új kategória", note: "", order: (items.length ? Math.max(...items.map(c => c.order ?? 0)) : 0) + 1 });
+  }
+
+  if (loading) return h("p", { className: "empty-state" }, "Betöltés…");
+
+  return h("div", null,
+    h("div", { className: "page-head" }, h("div", null, h("h1", null, "Kategóriák"), h("p", { className: "page-sub" }, "A menü fő szekciói és a megjelenési sorrendjük."))),
+    error && h("p", { className: "login-error" }, "Hiba: ", error),
+    h("div", { className: "toolbar" },
+      h("span", { className: "page-sub" }, items.length + " kategória"),
+      h("button", { className: "btn btn-primary", onClick: handleAdd }, "+ Új kategória")
+    ),
+    items.length === 0
+      ? h("p", { className: "empty-state" }, "Még nincs kategória.")
+      : h("div", { className: "table-wrap" },
+          h("table", { className: "data-table" },
+            h("thead", null, h("tr", null,
+              h("th", { className: "cell-order" }, "Sorrend"),
+              h("th", { className: "cell-name" }, "Név"),
+              h("th", null, "Megjegyzés"),
+              h("th", { className: "cell-actions" })
+            )),
+            h("tbody", null, ...items.map(c =>
+              h("tr", { key: c.id },
+                h("td", null, h(NumberCell, { className: "cell-order", value: c.order, onSave: v => updateItem(c.id, { order: v }) })),
+                h("td", null, h(TextCell, { className: "cell-name", value: c.name, onSave: v => updateItem(c.id, { name: v }) })),
+                h("td", null, h(TextCell, { value: c.note ?? "", placeholder: "pl. 32 cm", onSave: v => updateItem(c.id, { note: v }) })),
+                h("td", { className: "cell-actions" }, h("button", { className: "icon-btn", title: "Törlés", onClick: () => { if(confirm(`Törlöd: "${c.name}"?`)) removeItem(c.id); } }, "✕"))
+              )
+            ))
+          )
+        )
+  );
+}
+
+function ReviewsPage() {
+  const { items, loading, error, addItem, updateItem, removeItem } = useCollection("reviews");
+
+  async function handleAdd() {
+    await addItem({ name: "Új vendég", text: "", recommends: true, visible: true, order: (items.length ? Math.max(...items.map(r => r.order ?? 0)) : 0) + 1 });
+  }
+
+  if (loading) return h("p", { className: "empty-state" }, "Betöltés…");
+
+  return h("div", null,
+    h("div", { className: "page-head" }, h("div", null, h("h1", null, "Vélemények"), h("p", { className: "page-sub" }, "Vendégvélemények a weboldal Vélemények szekciójához."))),
+    error && h("p", { className: "login-error" }, "Hiba: ", error),
+    h("div", { className: "toolbar" },
+      h("span", { className: "page-sub" }, items.length + " vélemény"),
+      h("button", { className: "btn btn-primary", onClick: handleAdd }, "+ Új vélemény")
+    ),
+    items.length === 0
+      ? h("p", { className: "empty-state" }, "Még nincs vélemény.")
+      : h("div", { className: "table-wrap" },
+          h("table", { className: "data-table" },
+            h("thead", null, h("tr", null,
+              h("th", { className: "cell-order" }, "Sorrend"),
+              h("th", { className: "cell-name" }, "Név"),
+              h("th", { className: "cell-desc" }, "Vélemény"),
+              h("th", { className: "cell-checkbox" }, "Ajánlja"),
+              h("th", { className: "cell-checkbox" }, "Látható"),
+              h("th", { className: "cell-actions" })
+            )),
+            h("tbody", null, ...items.map(r =>
+              h("tr", { key: r.id, className: r.visible ? "" : "row-inactive" },
+                h("td", null, h(NumberCell, { className: "cell-order", value: r.order, onSave: v => updateItem(r.id, { order: v }) })),
+                h("td", null, h(TextCell, { className: "cell-name", value: r.name, onSave: v => updateItem(r.id, { name: v }) })),
+                h("td", null, h(TextCell, { className: "cell-desc", value: r.text, onSave: v => updateItem(r.id, { text: v }) })),
+                h("td", { className: "cell-checkbox" }, h(CheckboxCell, { checked: r.recommends, onSave: v => updateItem(r.id, { recommends: v }) })),
+                h("td", { className: "cell-checkbox" }, h(CheckboxCell, { checked: r.visible, onSave: v => updateItem(r.id, { visible: v }) })),
+                h("td", { className: "cell-actions" }, h("button", { className: "icon-btn", title: "Törlés", onClick: () => { if(confirm(`Törlöd: "${r.name}"?`)) removeItem(r.id); } }, "✕"))
+              )
+            ))
+          )
+        )
+  );
+}
+
+function SettingsPage() {
+  const { data: genData, loading: genLoading, save: genSave } = useDocument("settings", "general");
+  const { data: hoursData, loading: hoursLoading, save: hoursSave } = useDocument("settings", "hours");
+  const [genForm, setGenForm] = useState({});
+  const [hoursForm, setHoursForm] = useState({});
+  const [genStatus, setGenStatus] = useState("idle");
+  const [hoursStatus, setHoursStatus] = useState("idle");
+
+  useEffect(() => { if (genData) setGenForm(genData); }, [genData]);
+  useEffect(() => { if (hoursData) setHoursForm(hoursData); }, [hoursData]);
+
+  async function saveGen() {
+    setGenStatus("saving");
+    try { await genSave(genForm); setGenStatus("saved"); setTimeout(() => setGenStatus("idle"), 1800); }
+    catch { setGenStatus("error"); }
+  }
+  async function saveHours() {
+    setHoursStatus("saving");
+    try { await hoursSave(hoursForm); setHoursStatus("saved"); setTimeout(() => setHoursStatus("idle"), 1800); }
+    catch { setHoursStatus("error"); }
+  }
+
+  const genFields = [
+    ["address", "Cím", "Jókai Mór ltp. 9., Hajmáskér"],
+    ["addressMapsUrl", "Google Maps link", "https://maps.google.com/?q=..."],
+    ["phone", "Telefonszám (hívható)", "+36705846276"],
+    ["phoneDisplay", "Telefonszám (megjelenített)", "(70) 584 6276"],
+    ["email", "Email", "hajmaskerpizzeria@gmail.com"],
+    ["messengerUrl", "Messenger link", "https://m.me/..."],
+    ["heroPhotoUrl", "Hero fotó URL", "https://…/pizza.jpg"],
+  ];
+
+  return h("div", null,
+    h("div", { className: "page-head" }, h("div", null, h("h1", null, "Beállítások"))),
+    h("h2", null, "Elérhetőségek"),
+    genLoading ? h("p", { className: "empty-state" }, "Betöltés…") : h("div", null,
+      h("div", { className: "form-grid" },
+        ...genFields.map(([key, label, placeholder]) =>
+          h("div", { className: "form-field", key, style: key === "heroPhotoUrl" ? { gridColumn: "1 / -1" } : {} },
+            h("label", null, label),
+            h("input", { value: genForm[key] ?? "", placeholder, onChange: e => setGenForm(f => ({...f, [key]: e.target.value})) })
+          )
+        )
+      ),
+      h("div", { className: "toolbar" },
+        h("span", { className: `save-status ${genStatus}` }, genStatus === "saving" ? "Mentés…" : genStatus === "saved" ? "✓ Elmentve" : genStatus === "error" ? "Hiba!" : ""),
+        h("button", { className: "btn btn-primary", onClick: saveGen, disabled: genStatus === "saving" }, "Mentés")
+      )
+    ),
+    h("h2", { style: { marginTop: "2rem" } }, "Nyitvatartás"),
+    hoursLoading ? h("p", { className: "empty-state" }, "Betöltés…") : h("div", null,
+      h("div", { className: "form-grid", style: { gridTemplateColumns: "1fr", maxWidth: 560 } },
+        ...DAY_KEYS.map(day => {
+          const d = hoursForm[day] ?? {};
+          return h("div", { className: "hours-row", key: day },
+            h("span", { className: "hours-day-label" }, DAY_LABELS[day]),
+            d.closed
+              ? h("span", { className: "page-sub", style: { gridColumn: "2 / 4" } }, "Zárva")
+              : h(null, null,
+                  h("input", { type: "time", value: d.open ?? "", onChange: e => setHoursForm(f => ({...f, [day]: {...f[day], open: e.target.value}})) }),
+                  h("input", { type: "time", value: d.close ?? "", onChange: e => setHoursForm(f => ({...f, [day]: {...f[day], close: e.target.value}})) })
+                ),
+            h("label", { className: "hours-closed-toggle" },
+              h("input", { type: "checkbox", checked: !!d.closed, onChange: e => setHoursForm(f => ({...f, [day]: {...f[day], closed: e.target.checked}})) }),
+              "Zárva"
+            )
+          );
+        })
+      ),
+      h("div", { className: "toolbar" },
+        h("span", { className: `save-status ${hoursStatus}` }, hoursStatus === "saving" ? "Mentés…" : hoursStatus === "saved" ? "✓ Elmentve" : hoursStatus === "error" ? "Hiba!" : ""),
+        h("button", { className: "btn btn-primary", onClick: saveHours, disabled: hoursStatus === "saving" }, "Mentés")
+      )
+    )
+  );
+}
+
+// ── App shell ────────────────────────────────────────────────
+const NAV = [
+  { key: "products", label: "Termékek", icon: "🍕" },
+  { key: "categories", label: "Kategóriák", icon: "📂" },
+  { key: "reviews", label: "Vélemények", icon: "⭐" },
+  { key: "settings", label: "Beállítások", icon: "⚙️" },
+];
+
+function Shell({ user }) {
+  const [page, setPage] = useState("products");
+  const pages = { products: h(ProductsPage), categories: h(CategoriesPage), reviews: h(ReviewsPage), settings: h(SettingsPage) };
+
+  return h("div", { className: "app-shell" },
+    h("aside", { className: "sidebar" },
+      h("div", { className: "sidebar-brand" },
+        h("div", { className: "sidebar-brand-mark" }, "EP"),
+        h("div", { className: "sidebar-brand-name" }, "Enzopizza", h("small", null, "ADMIN · HAJMÁSKÉR"))
+      ),
+      h("nav", { className: "sidebar-nav" },
+        ...NAV.map(item =>
+          h("button", { key: item.key, className: page === item.key ? "active" : "", onClick: () => setPage(item.key) },
+            h("span", { "aria-hidden": "true" }, item.icon), " ", item.label
+          )
+        )
+      ),
+      h("div", { className: "sidebar-footer" },
+        user?.email && h("p", { className: "sidebar-user" }, user.email),
+        h("button", { className: "btn-logout", onClick: () => signOut(auth) }, "Kijelentkezés")
+      )
+    ),
+    h("main", { className: "main" }, pages[page])
+  );
+}
+
+function App() {
+  const { user, loading } = useAuth();
+  if (loading) return h("div", { className: "center-screen" }, "Betöltés…");
+  if (!user) return h(LoginPage);
+  return h(Shell, { user });
+}
+
+createRoot(document.getElementById("root")).render(h(App));
+</script>
+</body>
+</html>
