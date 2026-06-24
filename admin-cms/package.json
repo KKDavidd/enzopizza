@@ -20,13 +20,7 @@
     "autoprefixer": "^10.4.19",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.5.2",
-    "vite": "^5.3.1"
-  },
-  "sideEffects": [
-    "firebase/firestore",
-    "firebase/auth",
-    "firebase/app",
-    "**/firebase.ts",
-    "**/firebase.js"
-  ]
+    "vite": "^5.3.1",
+    "esbuild": "^0.21.0"
+  }
 }
