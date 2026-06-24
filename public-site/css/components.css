@@ -1,9 +1,3 @@
-/* ============================================================
-   ENZOPIZZA HAJMÁSKÉR — components.css
-   Menu tabs, item cards, review cards, mobile nav
-   ============================================================ */
-
-/* ===== MENU TABS ===== */
 .tab-btn {
   font-family: var(--font-mono);
   font-size: 0.82rem;
@@ -27,7 +21,6 @@
   color: var(--color-paper);
 }
 
-/* ===== MENU CATEGORY GROUP ===== */
 .menu-group {
   margin-bottom: 3.5rem;
 }
@@ -52,7 +45,6 @@
   gap: 1rem;
 }
 
-/* ===== MENU ITEM CARD ===== */
 .menu-item {
   background: var(--color-char-soft);
   border: 1px solid var(--color-char-line);
@@ -122,7 +114,6 @@
   color: var(--color-cheese);
 }
 
-/* ===== REVIEW CARD ===== */
 .review-card {
   background: var(--color-char);
   border: 1px solid var(--color-char-line);
@@ -162,7 +153,6 @@
   line-height: 1.55;
 }
 
-/* ===== MOBILE NAV DRAWER ===== */
 .nav-toggle.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .nav-toggle.is-open span:nth-child(2) { opacity: 0; }
 .nav-toggle.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
@@ -185,7 +175,6 @@
   .main-nav.is-open a { font-size: 1.05rem; }
 }
 
-/* ===== ANIMATIONS: fade-up on load ===== */
 .menu-group, .review-card {
   animation: fadeUp 0.5s var(--ease-out) both;
 }

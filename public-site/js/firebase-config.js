@@ -1,11 +1,5 @@
-// ============================================================
-// ENZOPIZZA HAJMÁSKÉR — firebase-config.js
-// Firebase app initialization for the PUBLIC site.
-// This client only ever READS from Firestore — it never writes.
-// ============================================================
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from "https:
+import { getFirestore } from "https:
 
 const firebaseConfig = {
   apiKey: "AIzaSyCLTLuVFG36zXOzF1YkrPm2hr4k8hRFwHI",

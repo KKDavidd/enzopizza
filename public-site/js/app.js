@@ -1,9 +1,3 @@
-// ============================================================
-// ENZOPIZZA HAJMÁSKÉR — app.js
-// General UI wiring: mobile nav toggle, header scroll state,
-// footer year, and kicking off the Firestore-backed loaders.
-// ============================================================
-
 import { initMenu } from "./menu.js";
 import { initInfo } from "./info.js";
 

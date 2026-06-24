@@ -1,30 +1,3 @@
-// ============================================================
-// ENZOPIZZA HAJMÁSKÉR — info.js
-// Loads restaurant settings (hours, contact info) and reviews
-// from Firestore and renders them into the page.
-//
-// Firestore shape expected:
-//
-// settings/general (single doc)
-//   address: string         "Jókai Mór ltp. 9., Hajmáskér, 8192"
-//   addressMapsUrl: string  Google Maps link
-//   phone: string           "+36705846276"
-//   phoneDisplay: string    "(70) 584 6276"
-//   email: string           "hajmaskerpizzeria@gmail.com"
-//   messengerUrl: string    "https://m.me/..."
-//   heroPhotoUrl: string|null  optional override for hero image
-//
-// settings/hours (single doc)
-//   monday..sunday: { open: "11:00", close: "20:00" } | { closed: true }
-//
-// reviews/{reviewId}
-//   name: string
-//   text: string
-//   recommends: boolean
-//   order: number
-//   visible: boolean
-// ============================================================
-
 import { db } from "./firebase-config.js";
 import {
   doc,
@@ -35,7 +8,7 @@ import {
   where,
   orderBy,
   limit
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} from "https:
 
 const DAY_KEYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 const DAY_LABELS = {
@@ -65,11 +38,9 @@ function initials(name) {
     .join("");
 }
 
-// --- Hours ---------------------------------------------------
-
 function getTodayKey() {
-  const jsDay = new Date().getDay(); // 0 = Sunday
-  return DAY_KEYS[(jsDay + 6) % 7]; // shift so 0 = Monday
+  const jsDay = new Date().getDay(); 
+  return DAY_KEYS[(jsDay + 6) % 7]; 
 }
 
 function isOpenNow(dayHours) {
@@ -121,8 +92,6 @@ function renderHours(hours) {
   }
 }
 
-// --- Contact / settings ---------------------------------------
-
 function renderSettings(settings) {
   if (!settings) return;
 
@@ -161,8 +130,6 @@ function renderSettings(settings) {
   }
 }
 
-// --- Reviews ---------------------------------------------------
-
 function renderReviews(reviews) {
   const grid = document.getElementById("reviews-grid");
   const scoreValue = document.getElementById("reviews-score-value");
@@ -200,8 +167,6 @@ function renderReviews(reviews) {
     grid.appendChild(card);
   });
 }
-
-// --- Loaders -----------------------------------------------------
 
 async function loadSettings() {
   const snap = await getDoc(doc(db, "settings", "general"));

@@ -1,30 +1,3 @@
-// ============================================================
-// ENZOPIZZA HAJMÁSKÉR — menu.js
-// Loads categories + products from Firestore and renders the
-// menu tabs + item cards. Also renders the allergen legend.
-//
-// Firestore shape expected (see /admin-cms README for full schema):
-//
-// categories/{categoryId}
-//   name: string            "Pizzák – 32 cm"
-//   order: number           controls display + tab order
-//   note: string|null       optional subtitle, e.g. "32 cm"
-//
-// products/{productId}
-//   categoryId: string      ref to categories/{categoryId}
-//   name: string            "SONGOKU"
-//   description: string     "Paradicsomszósz, sonka, gomba, kukorica, sajt"
-//   price: number            3300
-//   priceSuffix: string|null e.g. "/adag", "/1l" — appended after price
-//   allergens: number[]      [1,7]  -> matches the allergen legend below
-//   tags: string[]|null      e.g. ["Új", "Csípős"]
-//   order: number
-//   active: boolean           false = hidden from site
-//
-// settings/allergens (single doc, optional override)
-//   list: { [code: number]: string }  e.g. { "1": "Glutén", "7": "Tej" }
-// ============================================================
-
 import { db } from "./firebase-config.js";
 import {
   collection,
@@ -34,10 +7,8 @@ import {
   orderBy,
   doc,
   getDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} from "https:
 
-// Fallback allergen legend (matches the printed menu) — used if no
-// settings/allergens override doc exists in Firestore.
 const DEFAULT_ALLERGENS = {
   1: "Glutén", 2: "Rákfélék", 3: "Tojás", 4: "Hal", 5: "Földimogyoró",
   6: "Szójabab", 7: "Tej", 8: "Diófélék", 9: "Zeller", 10: "Mustár",
@@ -126,7 +97,7 @@ async function loadCategories() {
 
 async function loadProducts() {
   try {
-    // Try the composite-index query first (active==true + orderBy order)
+    
     const q = query(
       collection(db, "products"),
       where("active", "==", true),
@@ -135,8 +106,8 @@ async function loadProducts() {
     const snap = await getDocs(q);
     return snap.docs.map(d => ({ id: d.id, ...d.data() }));
   } catch (err) {
-    // Composite index may not be deployed yet — fall back to fetching all
-    // products and filtering client-side so the page still works.
+    
+    
     console.warn("Összetett index hiányzik, kliens oldali szűrés használata:", err);
     const q = query(collection(db, "products"), orderBy("order", "asc"));
     const snap = await getDocs(q);
@@ -159,7 +130,7 @@ function buildMenuDOM(categories, productsByCategory) {
     const tabId = `tab-${slugify(cat.name)}`;
     const panelId = `panel-${slugify(cat.name)}`;
 
-    // Tab button
+    
     const tabBtn = el("button", "tab-btn", cat.name);
     tabBtn.id = tabId;
     tabBtn.type = "button";
@@ -173,7 +144,7 @@ function buildMenuDOM(categories, productsByCategory) {
     });
     tabsNode.appendChild(tabBtn);
 
-    // Category group + cards
+    
     const group = el("div", "menu-group");
     group.id = panelId;
     group.setAttribute("role", "tabpanel");

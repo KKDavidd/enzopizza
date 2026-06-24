@@ -6,9 +6,7 @@
   <meta name="robots" content="noindex, nofollow" />
   <title>Enzopizza — Admin</title>
   <style>
-/* ============================================================
-   ENZOPIZZA HAJMÁSKÉR — Admin CMS styles
-   ============================================================ */
+
 :root {
   --color-char: #0E0C0A;
   --color-char-soft: #1C1815;
@@ -114,11 +112,11 @@ h2 { font-size: 1rem; margin-bottom: 0.75rem; }
 <script type="importmap">
 {
   "imports": {
-    "firebase/app": "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js",
-    "firebase/auth": "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js",
-    "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js",
-    "react": "https://esm.sh/react@18.3.1",
-    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client"
+    "firebase/app": "https:
+    "firebase/auth": "https:
+    "firebase/firestore": "https:
+    "react": "https:
+    "react-dom/client": "https:
   }
 }
 </script>
@@ -130,7 +128,6 @@ import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, setDoc, on
 import { useState, useEffect, createElement as h, Fragment } from "react";
 import { createRoot } from "react-dom/client";
 
-// ── Firebase init ────────────────────────────────────────────
 const firebaseConfig = {
   apiKey: "AIzaSyCLTLuVFG36zXOzF1YkrPm2hr4k8hRFwHI",
   authDomain: "enzohajm.firebaseapp.com",
@@ -143,13 +140,11 @@ const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ── Constants ────────────────────────────────────────────────
 const ALLERGEN_LEGEND = {1:"Glutén",2:"Rákfélék",3:"Tojás",4:"Hal",5:"Földimogyoró",6:"Szójabab",7:"Tej",8:"Diófélék",9:"Zeller",10:"Mustár",11:"Szezámmag",12:"Kéndioxid",13:"Csillagfürt",14:"Puhatestűek",15:"Méz"};
 const DAY_KEYS = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
 const DAY_LABELS = {monday:"Hétfő",tuesday:"Kedd",wednesday:"Szerda",thursday:"Csütörtök",friday:"Péntek",saturday:"Szombat",sunday:"Vasárnap"};
 const ERROR_MESSAGES = {"auth/invalid-credential":"Hibás email cím vagy jelszó.","auth/invalid-email":"Érvénytelen email cím.","auth/user-disabled":"Ez a fiók le van tiltva.","auth/too-many-requests":"Túl sok próbálkozás. Várj egy kicsit."};
 
-// ── Hooks ────────────────────────────────────────────────────
 function useAuth() {
   const [user, setUser] = useState(undefined);
   useEffect(() => onAuthStateChanged(auth, setUser), []);
@@ -189,7 +184,6 @@ function useDocument(path, id) {
   return { data, loading, error, save };
 }
 
-// ── Cell components ──────────────────────────────────────────
 function TextCell({ value, onSave, placeholder, className }) {
   const [draft, setDraft] = useState(value ?? "");
   useEffect(() => setDraft(value ?? ""), [value]);
@@ -231,7 +225,6 @@ function AllergenChipsCell({ selected, onSave }) {
   );
 }
 
-// ── Pages ────────────────────────────────────────────────────
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -421,12 +414,12 @@ function SettingsPage() {
 
   const genFields = [
     ["address", "Cím", "Jókai Mór ltp. 9., Hajmáskér"],
-    ["addressMapsUrl", "Google Maps link", "https://maps.google.com/?q=..."],
+    ["addressMapsUrl", "Google Maps link", "https:
     ["phone", "Telefonszám (hívható)", "+36705846276"],
     ["phoneDisplay", "Telefonszám (megjelenített)", "(70) 584 6276"],
     ["email", "Email", "hajmaskerpizzeria@gmail.com"],
-    ["messengerUrl", "Messenger link", "https://m.me/..."],
-    ["heroPhotoUrl", "Hero fotó URL", "https://…/pizza.jpg"],
+    ["messengerUrl", "Messenger link", "https:
+    ["heroPhotoUrl", "Hero fotó URL", "https:
   ];
 
   return h("div", null,
@@ -474,7 +467,6 @@ function SettingsPage() {
   );
 }
 
-// ── App shell ────────────────────────────────────────────────
 const NAV = [
   { key: "products", label: "Termékek", icon: "🍕" },
   { key: "categories", label: "Kategóriák", icon: "📂" },

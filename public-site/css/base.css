@@ -1,22 +1,17 @@
-/* ============================================================
-   ENZOPIZZA HAJMÁSKÉR — base.css
-   Design tokens, reset, typography
-   ============================================================ */
-
 :root {
-  /* --- Color tokens --- */
-  --color-char: #0E0C0A;        /* charcoal base — torn-paper black */
-  --color-char-soft: #1C1815;   /* card surface, slightly warmer */
-  --color-char-line: #2C2620;   /* hairline borders on dark */
-  --color-cream: #F5EFE4;       /* baked-crust cream — primary text on dark */
-  --color-cream-dim: #C9C0AF;   /* secondary text on dark */
-  --color-tomato: #C8472E;      /* tomato-sauce red — sole strong accent */
+  
+  --color-char: #0E0C0A;        
+  --color-char-soft: #1C1815;   
+  --color-char-line: #2C2620;   
+  --color-cream: #F5EFE4;       
+  --color-cream-dim: #C9C0AF;   
+  --color-tomato: #C8472E;      
   --color-tomato-dim: #9C3722;
-  --color-cheese: #C99A4B;      /* cheese-gold — secondary accent */
-  --color-paper: #FBF8F2;       /* light card / paper surface */
+  --color-cheese: #C99A4B;      
+  --color-paper: #FBF8F2;       
   --color-paper-shadow: #E7DFCF;
 
-  /* --- Type tokens --- */
+  
   --font-display: 'Anton', 'Arial Narrow', sans-serif;
   --font-body: 'Karla', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'SFMono-Regular', monospace;
@@ -27,7 +22,7 @@
   --fs-body: 1.05rem;
   --fs-small: 0.875rem;
 
-  /* --- Layout tokens --- */
+  
   --maxw: 1180px;
   --gutter: clamp(1.25rem, 4vw, 3rem);
   --radius-sm: 6px;
@@ -37,7 +32,6 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* --- Reset --- */
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
@@ -89,7 +83,6 @@ button {
   outline-offset: 3px;
 }
 
-/* --- Shared type utilities --- */
 .eyebrow {
   font-family: var(--font-mono);
   font-size: 0.78rem;
@@ -113,7 +106,6 @@ button {
   font-size: 0.95rem;
 }
 
-/* --- Buttons --- */
 .btn {
   display: inline-flex;
   align-items: center;
