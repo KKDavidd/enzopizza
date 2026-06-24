@@ -31,7 +31,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--c
 .app-shell { display: flex; min-height: 100vh; }
 .sidebar { width: 220px; flex-shrink: 0; background: var(--color-char-soft); border-right: 1px solid var(--color-char-line); display: flex; flex-direction: column; padding: 1.25rem 0; }
 .sidebar-brand { display: flex; align-items: center; gap: 0.6rem; padding: 0 1.25rem 1.25rem; border-bottom: 1px solid var(--color-char-line); margin-bottom: 1rem; }
-.sidebar-brand-mark { width: 34px; height: 34px; border-radius: 50%; background: var(--color-tomato); display: grid; place-items: center; font-weight: 800; font-size: 0.85rem; flex-shrink: 0; }
+.sidebar-brand-mark { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
 .sidebar-brand-name { font-weight: 700; font-size: 0.95rem; line-height: 1.2; }
 .sidebar-brand-name small { display: block; font-weight: 400; font-size: 0.7rem; color: var(--color-cream-dim); }
 .sidebar-nav { display: flex; flex-direction: column; gap: 0.2rem; padding: 0 0.6rem; }
@@ -489,7 +489,7 @@ function Shell({ user }) {
   return h("div", { className: "app-shell" },
     h("aside", { className: "sidebar" },
       h("div", { className: "sidebar-brand" },
-        h("div", { className: "sidebar-brand-mark" }, "EP"),
+        h("img", { className: "sidebar-brand-mark", src: "/assets/enzo.png", alt: "Enzopizza" }),
         h("div", { className: "sidebar-brand-name" }, "Enzopizza", h("small", null, "ADMIN · HAJMÁSKÉR"))
       ),
       h("nav", { className: "sidebar-nav" },
