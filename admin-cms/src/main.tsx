@@ -1,3 +1,7 @@
+// Firebase must be initialized before any component mounts.
+// This explicit import guarantees the module runs first.
+import "./lib/firebase";
+
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { ErrorBoundary } from "./ErrorBoundary";
