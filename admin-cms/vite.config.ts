@@ -10,17 +10,8 @@ export default defineConfig({
     sourcemap: false,
     rollupOptions: {
       output: {
-        manualChunks: {
-          firebase: [
-            "firebase/app",
-            "firebase/auth",
-            "firebase/firestore"
-          ]
-        }
+        inlineDynamicImports: true
       }
     }
-  },
-  optimizeDeps: {
-    include: ["firebase/app", "firebase/auth", "firebase/firestore"]
   }
 });
