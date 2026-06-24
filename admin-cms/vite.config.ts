@@ -7,16 +7,20 @@ export default defineConfig({
   server: { port: 5173 },
   build: {
     outDir: "dist",
-    sourcemap: false
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          firebase: [
+            "firebase/app",
+            "firebase/auth",
+            "firebase/firestore"
+          ]
+        }
+      }
+    }
   },
   optimizeDeps: {
-    include: [
-      "firebase/app",
-      "firebase/auth",
-      "firebase/firestore"
-    ]
-  },
-  resolve: {
-    dedupe: ["firebase/app", "firebase/auth", "firebase/firestore"]
+    include: ["firebase/app", "firebase/auth", "firebase/firestore"]
   }
 });
