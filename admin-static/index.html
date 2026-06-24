@@ -127,7 +127,7 @@ h2 { font-size: 1rem; margin-bottom: 0.75rem; }
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, setDoc, onSnapshot, query, orderBy } from "firebase/firestore";
-import { useState, useEffect, createElement as h } from "react";
+import { useState, useEffect, createElement as h, Fragment } from "react";
 import { createRoot } from "react-dom/client";
 
 // ── Firebase init ────────────────────────────────────────────
@@ -455,7 +455,7 @@ function SettingsPage() {
             h("span", { className: "hours-day-label" }, DAY_LABELS[day]),
             d.closed
               ? h("span", { className: "page-sub", style: { gridColumn: "2 / 4" } }, "Zárva")
-              : h(null, null,
+              : h(Fragment, null,
                   h("input", { type: "time", value: d.open ?? "", onChange: e => setHoursForm(f => ({...f, [day]: {...f[day], open: e.target.value}})) }),
                   h("input", { type: "time", value: d.close ?? "", onChange: e => setHoursForm(f => ({...f, [day]: {...f[day], close: e.target.value}})) })
                 ),
