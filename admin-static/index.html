@@ -4,10 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
-  <link rel="icon" href="/assets/enzo.png" />
   <title>Enzopizza — Admin</title>
+  <link rel="icon" href="/assets/enzo.png" />
   <style>
-
 :root {
   --color-char: #0E0C0A;
   --color-char-soft: #1C1815;
@@ -109,19 +108,17 @@ h2 { font-size: 1rem; margin-bottom: 0.75rem; }
 </head>
 <body>
 <div id="root"><div class="center-screen">Betöltés…</div></div>
-
 <script type="importmap">
 {
   "imports": {
-    "firebase/app": "https:
-    "firebase/auth": "https:
-    "firebase/firestore": "https:
-    "react": "https:
-    "react-dom/client": "https:
+    "firebase/app": "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js",
+    "firebase/auth": "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js",
+    "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js",
+    "react": "https://esm.sh/react@18.3.1",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client"
   }
 }
 </script>
-
 <script type="module">
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
@@ -279,7 +276,7 @@ function ProductsPage() {
       h("button", { className: "btn btn-primary", onClick: handleAdd, disabled: categories.length === 0 }, "+ Új termék")
     ),
     products.length === 0
-      ? h("p", { className: "empty-state" }, "Még nincs termék. Kattints a \"+ Új termék\" gombra.")
+      ? h("p", { className: "empty-state" }, "Még nincs termék.")
       : h("div", { className: "table-wrap" },
           h("table", { className: "data-table" },
             h("thead", null, h("tr", null,
@@ -415,12 +412,12 @@ function SettingsPage() {
 
   const genFields = [
     ["address", "Cím", "Jókai Mór ltp. 9., Hajmáskér"],
-    ["addressMapsUrl", "Google Maps link", "https:
+    ["addressMapsUrl", "Google Maps link", "https://maps.google.com/?q=..."],
     ["phone", "Telefonszám (hívható)", "+36705846276"],
     ["phoneDisplay", "Telefonszám (megjelenített)", "(70) 584 6276"],
     ["email", "Email", "hajmaskerpizzeria@gmail.com"],
-    ["messengerUrl", "Messenger link", "https:
-    ["heroPhotoUrl", "Hero fotó URL", "https:
+    ["messengerUrl", "Messenger link", "https://m.me/..."],
+    ["heroPhotoUrl", "Hero fotó URL", "https://…/pizza.jpg"],
   ];
 
   return h("div", null,
@@ -478,7 +475,6 @@ const NAV = [
 function Shell({ user }) {
   const [page, setPage] = useState("products");
   const pages = { products: h(ProductsPage), categories: h(CategoriesPage), reviews: h(ReviewsPage), settings: h(SettingsPage) };
-
   return h("div", { className: "app-shell" },
     h("aside", { className: "sidebar" },
       h("div", { className: "sidebar-brand" },
