@@ -189,8 +189,15 @@ async function loadReviews() {
     const snap = await getDocs(q);
     return snap.docs.map(d => ({ id: d.id, ...d.data() }));
   } catch (err) {
-    console.warn("Vélemények betöltése sikertelen.", err);
-    return [];
+    console.warn("Összetett index hiányzik, fallback használata:", err);
+    try {
+      const q = query(collection(db, "reviews"), orderBy("order", "asc"), limit(12));
+      const snap = await getDocs(q);
+      return snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.visible !== false);
+    } catch (err2) {
+      console.warn("Vélemények betöltése sikertelen.", err2);
+      return [];
+    }
   }
 }
 
