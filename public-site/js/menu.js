@@ -7,7 +7,7 @@ import {
   orderBy,
   doc,
   getDoc
-} from "https:
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"
 
 const DEFAULT_ALLERGENS = {
   1: "Glutén", 2: "Rákfélék", 3: "Tojás", 4: "Hal", 5: "Földimogyoró",
