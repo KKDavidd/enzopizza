@@ -352,16 +352,35 @@ const NAV = [
 
 function Shell({ user }) {
   const [page, setPage] = useState("products");
+  const [navOpen, setNavOpen] = useState(false);
   const pages = { products: h(ProductsPage), categories: h(CategoriesPage), reviews: h(ReviewsPage), settings: h(SettingsPage) };
+  const activeItem = NAV.find(item => item.key === page);
+
+  function goTo(key) {
+    setPage(key);
+    setNavOpen(false);
+  }
+
   return h("div", { className: "app-shell" },
-    h("aside", { className: "sidebar" },
-      h("div", { className: "sidebar-brand" },
-        h("img", { className: "sidebar-brand-mark", src: "/assets/enzo.png", alt: "Enzopizza" }),
-        h("div", { className: "sidebar-brand-name" }, "Enzopizza", h("small", null, "ADMIN · HAJMÁSKÉR"))
+    h("aside", { className: `sidebar ${navOpen ? "nav-open" : ""}` },
+      h("div", { className: "sidebar-top" },
+        h("div", { className: "sidebar-brand" },
+          h("img", { className: "sidebar-brand-mark", src: "/assets/enzo.png", alt: "Enzopizza" }),
+          h("div", { className: "sidebar-brand-name" }, "Enzopizza", h("small", null, "ADMIN · HAJMÁSKÉR"))
+        ),
+        h("span", { className: "sidebar-current-page", "aria-hidden": "true" },
+          h("span", null, activeItem?.icon), " ", activeItem?.label
+        ),
+        h("button", {
+          className: "nav-hamburger",
+          "aria-label": navOpen ? "Menü bezárása" : "Menü megnyitása",
+          "aria-expanded": navOpen,
+          onClick: () => setNavOpen(o => !o)
+        }, h("span"), h("span"), h("span"))
       ),
       h("nav", { className: "sidebar-nav" },
         ...NAV.map(item =>
-          h("button", { key: item.key, className: page === item.key ? "active" : "", onClick: () => setPage(item.key) },
+          h("button", { key: item.key, className: page === item.key ? "active" : "", onClick: () => goTo(item.key) },
             h("span", { "aria-hidden": "true" }, item.icon), " ", item.label
           )
         )
@@ -371,6 +390,7 @@ function Shell({ user }) {
         h("button", { className: "btn-logout", onClick: () => signOut(auth) }, "Kijelentkezés")
       )
     ),
+    navOpen && h("div", { className: "nav-backdrop", onClick: () => setNavOpen(false) }),
     h("main", { className: "main" }, pages[page])
   );
 }
