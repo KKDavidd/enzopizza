@@ -16,6 +16,21 @@ const DAY_LABELS = {
   friday: "Péntek", saturday: "Szombat", sunday: "Vasárnap"
 };
 
+// Ezek az értékek már be vannak írva az index.html-be (contact-address,
+// contact-phone, contact-email, contact-messenger, footer-address,
+// header-call-link), így az oldal Firestore nélkül is helyesen jelenik meg.
+// A backendből (settings/general) jövő adat csak akkor írja felül a DOM-ot,
+// ha VALÓBAN eltér ettől az alapértéktől — így nincs felesleges "vibrálás",
+// ha a Firestore-ban ugyanaz van beállítva, mint az alapérték.
+const DEFAULT_SETTINGS = {
+  address: "Jókai Mór ltp. 9., Hajmáskér, 8192",
+  addressMapsUrl: "https://maps.google.com/?q=Jókai+Mór+ltp.+9.,+Hajmáskér,+8192",
+  phone: "+36705846276",
+  phoneDisplay: "(70) 584 6276",
+  email: "hajmaskerpizzeria@gmail.com",
+  messengerUrl: "https://m.me/enzopizzahajmasker"
+};
+
 function el(tag, className, html) {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -93,8 +108,6 @@ function renderHours(hours) {
 }
 
 function renderSettings(settings) {
-  if (!settings) return;
-
   const addressLink = document.getElementById("contact-address");
   const phoneLink = document.getElementById("contact-phone");
   const emailLink = document.getElementById("contact-email");
@@ -103,30 +116,44 @@ function renderSettings(settings) {
   const headerCallValue = document.querySelector("#header-call-link .cta-value");
   const heroImg = document.getElementById("hero-photo-img");
 
-  if (addressLink && settings.address) {
-    addressLink.textContent = settings.address;
-    addressLink.href = settings.addressMapsUrl || "#";
+  // A HTML-ben már ott vannak az alapértékek (DEFAULT_SETTINGS).
+  // Csak akkor nyúlunk a DOM-hoz, ha a Firestore-ból jövő érték
+  // TÉNYLEGESEN eltér az alapértéktől — ha nincs settings dokumentum,
+  // vagy pontosan ugyanaz van beállítva, a lap a saját alapértékét tartja.
+  const remote = settings || {};
+
+  const addressChanged = remote.address && remote.address !== DEFAULT_SETTINGS.address;
+  const phoneChanged = remote.phone && remote.phone !== DEFAULT_SETTINGS.phone;
+  const phoneDisplayChanged = remote.phoneDisplay && remote.phoneDisplay !== DEFAULT_SETTINGS.phoneDisplay;
+  const emailChanged = remote.email && remote.email !== DEFAULT_SETTINGS.email;
+  const messengerChanged = remote.messengerUrl && remote.messengerUrl !== DEFAULT_SETTINGS.messengerUrl;
+
+  if (addressLink && addressChanged) {
+    addressLink.textContent = remote.address;
+    addressLink.href = remote.addressMapsUrl || "#";
   }
-  if (phoneLink && settings.phone) {
-    phoneLink.textContent = settings.phoneDisplay || settings.phone;
-    phoneLink.href = `tel:${settings.phone}`;
+  if (phoneLink && (phoneChanged || phoneDisplayChanged)) {
+    phoneLink.textContent = remote.phoneDisplay || remote.phone;
+    phoneLink.href = `tel:${remote.phone || DEFAULT_SETTINGS.phone}`;
   }
-  if (emailLink && settings.email) {
-    emailLink.textContent = settings.email;
-    emailLink.href = `mailto:${settings.email}`;
+  if (emailLink && emailChanged) {
+    emailLink.textContent = remote.email;
+    emailLink.href = `mailto:${remote.email}`;
   }
-  if (messengerLink && settings.messengerUrl) {
-    messengerLink.href = settings.messengerUrl;
+  if (messengerLink && messengerChanged) {
+    messengerLink.href = remote.messengerUrl;
   }
-  if (footerAddress && settings.address) {
-    footerAddress.textContent = settings.address;
+  if (footerAddress && addressChanged) {
+    footerAddress.textContent = remote.address;
   }
-  if (headerCallValue && settings.phoneDisplay) {
-    headerCallValue.textContent = settings.phoneDisplay;
-    document.getElementById("header-call-link").href = `tel:${settings.phone || ""}`;
+  if (headerCallValue && (phoneChanged || phoneDisplayChanged)) {
+    headerCallValue.textContent = remote.phoneDisplay || remote.phone;
+    document.getElementById("header-call-link").href = `tel:${remote.phone || DEFAULT_SETTINGS.phone}`;
   }
-  if (heroImg && settings.heroPhotoUrl) {
-    heroImg.src = settings.heroPhotoUrl;
+  // A hero fotónak nincs statikus alapértéke a HTML-ben, azt továbbra is
+  // mindig beállítjuk, ha a backend ad meg egyet.
+  if (heroImg && remote.heroPhotoUrl) {
+    heroImg.src = remote.heroPhotoUrl;
   }
 }
 
