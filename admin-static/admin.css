@@ -89,9 +89,94 @@ select.cell-input { appearance: none; }
 h2 { font-size: 1rem; margin-bottom: 0.75rem; }
 @media (max-width: 800px) {
   .app-shell { flex-direction: column; }
-  .sidebar { width: 100%; flex-direction: row; align-items: center; padding: 0.75rem 1rem; overflow-x: auto; }
-  .sidebar-brand { border: none; padding: 0; margin: 0 1rem 0 0; }
-  .sidebar-nav { flex-direction: row; padding: 0; }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.6rem 0.75rem;
+    padding-left: max(0.75rem, env(safe-area-inset-left));
+    padding-right: max(0.75rem, env(safe-area-inset-right));
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  .sidebar-brand { border: none; padding: 0; margin: 0 0.75rem 0 0; }
+  .sidebar-brand-name { display: none; }
+  .sidebar-nav { flex-direction: row; padding: 0; gap: 0.35rem; }
+  .sidebar-nav button { flex-shrink: 0; padding: 0.6rem 0.75rem; min-height: 44px; font-size: 0.85rem; }
   .sidebar-footer { display: none; }
-  .main { padding: 1.25rem; }
+  .main { padding: 1rem; padding-bottom: max(1.5rem, env(safe-area-inset-bottom)); }
+  .page-head h1 { font-size: 1.3rem; }
+
+  /* Bigger, thumb-friendly controls everywhere */
+  .btn, .btn-logout, .icon-btn, input, select, textarea, .cell-input {
+    min-height: 44px;
+    font-size: 0.95rem;
+  }
+  .toolbar { position: sticky; bottom: 0; background: var(--color-char); padding: 0.6rem 0; margin: 0 -1rem; padding-left: 1rem; padding-right: 1rem; border-top: 1px solid var(--color-char-line); }
+  .btn { width: 100%; justify-content: center; }
+  .toolbar .btn { width: auto; }
+
+  /* Tables become stacked cards instead of horizontally-scrolling grids */
+  .table-wrap { border: none; overflow-x: visible; }
+  table.data-table { background: transparent; }
+  .data-table thead { display: none; }
+  .data-table, .data-table tbody, .data-table tr, .data-table td {
+    display: block;
+    width: 100%;
+  }
+  .data-table tr {
+    background: var(--color-char-soft);
+    border: 1px solid var(--color-char-line);
+    border-radius: var(--radius);
+    padding: 0.4rem 0.85rem;
+    margin-bottom: 0.85rem;
+  }
+  .data-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--color-char-line);
+    min-height: 44px;
+  }
+  .data-table tr:last-child { margin-bottom: 0; }
+  .data-table td:last-child { border-bottom: none; }
+  .data-table td::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-cream-dim);
+  }
+  .data-table td.cell-actions { justify-content: center; }
+  .data-table td.cell-actions::before { content: none; }
+  .data-table td.cell-actions .icon-btn { width: 100%; border: 1px solid var(--color-char-line); border-radius: 6px; }
+  .data-table td .cell-input, .data-table td select.cell-input, .data-table td .cell-order,
+  .data-table td .cell-price, .data-table td .cell-name, .data-table td .cell-desc {
+    width: auto;
+    max-width: 62%;
+    text-align: right;
+  }
+  .allergen-chips { max-width: 62%; justify-content: flex-end; }
+  .allergen-chip { font-size: 0.75rem; padding: 5px 8px; min-height: 28px; }
+
+  /* Settings forms */
+  .form-grid { grid-template-columns: 1fr !important; padding: 1rem; }
+  .hours-row {
+    grid-template-columns: 1fr;
+    row-gap: 0.5rem;
+    padding: 0.75rem 0;
+  }
+  .hours-row input[type="time"] { width: 100%; }
+  .hours-row .page-sub { grid-column: 1 / -1 !important; }
+  .hours-closed-toggle { justify-content: flex-start; }
+
+  .login-screen { padding: max(1.25rem, env(safe-area-inset-top)) 1rem; }
 }
+

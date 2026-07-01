@@ -169,14 +169,14 @@ function ProductsPage() {
             )),
             h("tbody", null, ...products.map(p =>
               h("tr", { key: p.id, className: p.active ? "" : "row-inactive" },
-                h("td", null, h(NumberCell, { className: "cell-order", value: p.order, onSave: v => updateItem(p.id, { order: v }) })),
-                h("td", null, h(TextCell, { className: "cell-name", value: p.name, onSave: v => updateItem(p.id, { name: v }) })),
-                h("td", null, catOptions.length ? h(SelectCell, { value: p.categoryId, options: catOptions, onSave: v => updateItem(p.id, { categoryId: v }) }) : p.categoryId),
-                h("td", null, h(TextCell, { className: "cell-desc", value: p.description ?? "", placeholder: "Összetevők…", onSave: v => updateItem(p.id, { description: v }) })),
-                h("td", null, h(NumberCell, { className: "cell-price", value: p.price, min: 0, onSave: v => updateItem(p.id, { price: v }) })),
-                h("td", null, h(AllergenChipsCell, { selected: p.allergens ?? [], onSave: v => updateItem(p.id, { allergens: v }) })),
-                h("td", { className: "cell-checkbox" }, h(CheckboxCell, { checked: p.active, onSave: v => updateItem(p.id, { active: v }) })),
-                h("td", { className: "cell-actions" }, h("button", { className: "icon-btn", title: "Törlés", onClick: () => { if(confirm(`Törlöd: "${p.name}"?`)) removeItem(p.id); } }, "✕"))
+                h("td", { "data-label": "Sorrend" }, h(NumberCell, { className: "cell-order", value: p.order, onSave: v => updateItem(p.id, { order: v }) })),
+                h("td", { "data-label": "Név" }, h(TextCell, { className: "cell-name", value: p.name, onSave: v => updateItem(p.id, { name: v }) })),
+                h("td", { "data-label": "Kategória" }, catOptions.length ? h(SelectCell, { value: p.categoryId, options: catOptions, onSave: v => updateItem(p.id, { categoryId: v }) }) : p.categoryId),
+                h("td", { "data-label": "Leírás" }, h(TextCell, { className: "cell-desc", value: p.description ?? "", placeholder: "Összetevők…", onSave: v => updateItem(p.id, { description: v }) })),
+                h("td", { "data-label": "Ár (Ft)" }, h(NumberCell, { className: "cell-price", value: p.price, min: 0, onSave: v => updateItem(p.id, { price: v }) })),
+                h("td", { "data-label": "Allergének" }, h(AllergenChipsCell, { selected: p.allergens ?? [], onSave: v => updateItem(p.id, { allergens: v }) })),
+                h("td", { className: "cell-checkbox", "data-label": "Aktív" }, h(CheckboxCell, { checked: p.active, onSave: v => updateItem(p.id, { active: v }) })),
+                h("td", { className: "cell-actions" }, h("button", { className: "icon-btn", title: "Törlés", onClick: () => { if(confirm(`Törlöd: "${p.name}"?`)) removeItem(p.id); } }, "✕ Törlés"))
               )
             ))
           )
@@ -212,10 +212,10 @@ function CategoriesPage() {
             )),
             h("tbody", null, ...items.map(c =>
               h("tr", { key: c.id },
-                h("td", null, h(NumberCell, { className: "cell-order", value: c.order, onSave: v => updateItem(c.id, { order: v }) })),
-                h("td", null, h(TextCell, { className: "cell-name", value: c.name, onSave: v => updateItem(c.id, { name: v }) })),
-                h("td", null, h(TextCell, { value: c.note ?? "", placeholder: "pl. 32 cm", onSave: v => updateItem(c.id, { note: v }) })),
-                h("td", { className: "cell-actions" }, h("button", { className: "icon-btn", title: "Törlés", onClick: () => { if(confirm(`Törlöd: "${c.name}"?`)) removeItem(c.id); } }, "✕"))
+                h("td", { "data-label": "Sorrend" }, h(NumberCell, { className: "cell-order", value: c.order, onSave: v => updateItem(c.id, { order: v }) })),
+                h("td", { "data-label": "Név" }, h(TextCell, { className: "cell-name", value: c.name, onSave: v => updateItem(c.id, { name: v }) })),
+                h("td", { "data-label": "Megjegyzés" }, h(TextCell, { value: c.note ?? "", placeholder: "pl. 32 cm", onSave: v => updateItem(c.id, { note: v }) })),
+                h("td", { className: "cell-actions" }, h("button", { className: "icon-btn", title: "Törlés", onClick: () => { if(confirm(`Törlöd: "${c.name}"?`)) removeItem(c.id); } }, "✕ Törlés"))
               )
             ))
           )
@@ -253,12 +253,12 @@ function ReviewsPage() {
             )),
             h("tbody", null, ...items.map(r =>
               h("tr", { key: r.id, className: r.visible ? "" : "row-inactive" },
-                h("td", null, h(NumberCell, { className: "cell-order", value: r.order, onSave: v => updateItem(r.id, { order: v }) })),
-                h("td", null, h(TextCell, { className: "cell-name", value: r.name, onSave: v => updateItem(r.id, { name: v }) })),
-                h("td", null, h(TextCell, { className: "cell-desc", value: r.text, onSave: v => updateItem(r.id, { text: v }) })),
-                h("td", { className: "cell-checkbox" }, h(CheckboxCell, { checked: r.recommends, onSave: v => updateItem(r.id, { recommends: v }) })),
-                h("td", { className: "cell-checkbox" }, h(CheckboxCell, { checked: r.visible, onSave: v => updateItem(r.id, { visible: v }) })),
-                h("td", { className: "cell-actions" }, h("button", { className: "icon-btn", title: "Törlés", onClick: () => { if(confirm(`Törlöd: "${r.name}"?`)) removeItem(r.id); } }, "✕"))
+                h("td", { "data-label": "Sorrend" }, h(NumberCell, { className: "cell-order", value: r.order, onSave: v => updateItem(r.id, { order: v }) })),
+                h("td", { "data-label": "Név" }, h(TextCell, { className: "cell-name", value: r.name, onSave: v => updateItem(r.id, { name: v }) })),
+                h("td", { "data-label": "Vélemény" }, h(TextCell, { className: "cell-desc", value: r.text, onSave: v => updateItem(r.id, { text: v }) })),
+                h("td", { className: "cell-checkbox", "data-label": "Ajánlja" }, h(CheckboxCell, { checked: r.recommends, onSave: v => updateItem(r.id, { recommends: v }) })),
+                h("td", { className: "cell-checkbox", "data-label": "Látható" }, h(CheckboxCell, { checked: r.visible, onSave: v => updateItem(r.id, { visible: v }) })),
+                h("td", { className: "cell-actions" }, h("button", { className: "icon-btn", title: "Törlés", onClick: () => { if(confirm(`Törlöd: "${r.name}"?`)) removeItem(r.id); } }, "✕ Törlés"))
               )
             ))
           )
