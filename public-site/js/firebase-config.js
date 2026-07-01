@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCLTLuVFG36zXOzF1YkrPm2hr4k8hRFwHI",
@@ -11,4 +11,11 @@ const firebaseConfig = {
 };
 
 export const firebaseApp = initializeApp(firebaseConfig);
-export const db = getFirestore(firebaseApp);
+
+// Firefoxon (főleg mobilnetes/proxy-s kapcsolatnál) a Firestore alap
+// WebChannel-streamje néha örökre "lóg" hiba nélkül. Az autoDetect
+// bekapcsolása miatt long-pollingra vált, ha a streaming nem működik.
+export const db = initializeFirestore(firebaseApp, {
+  experimentalAutoDetectLongPolling: true,
+  useFetchStreams: false
+});
