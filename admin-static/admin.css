@@ -31,7 +31,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--c
 .sidebar-user { font-size: 0.78rem; color: var(--color-cream-dim); margin-bottom: 0.6rem; word-break: break-all; }
 .btn-logout { width: 100%; background: none; border: 1px solid var(--color-char-line); color: var(--color-cream-dim); padding: 0.5rem; border-radius: 6px; font-size: 0.82rem; font-weight: 600; }
 .btn-logout:hover { border-color: var(--color-tomato); color: var(--color-tomato); }
-.main { flex: 1; padding: 2rem 2.5rem; max-width: 1200px; overflow-x: auto; }
+.main { flex: 1; padding: 2rem 2.5rem; overflow-x: auto; }
 .page-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem; }
 .page-head h1 { font-size: 1.5rem; margin: 0; }
 .page-sub { color: var(--color-cream-dim); font-size: 0.85rem; margin-top: 0.2rem; }
