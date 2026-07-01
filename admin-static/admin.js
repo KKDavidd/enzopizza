@@ -176,7 +176,7 @@ function ProductsPage() {
                 h("td", { "data-label": "Ár (Ft)" }, h(NumberCell, { className: "cell-price", value: p.price, min: 0, onSave: v => updateItem(p.id, { price: v }) })),
                 h("td", { "data-label": "Allergének" }, h(AllergenChipsCell, { selected: p.allergens ?? [], onSave: v => updateItem(p.id, { allergens: v }) })),
                 h("td", { className: "cell-checkbox", "data-label": "Aktív" }, h(CheckboxCell, { checked: p.active, onSave: v => updateItem(p.id, { active: v }) })),
-                h("td", { className: "cell-actions" }, h("button", { className: "icon-btn", title: "Törlés", onClick: () => { if(confirm(`Törlöd: "${p.name}"?`)) removeItem(p.id); } }, "✕ Törlés"))
+                h("td", { className: "cell-actions" }, h("button", { className: "icon-btn", title: "Törlés", onClick: () => { if(confirm(`Törlöd: "${p.name}"?`)) removeItem(p.id); } }, "✕", h("span", { className: "btn-label" }, " Törlés")))
               )
             ))
           )
@@ -215,7 +215,7 @@ function CategoriesPage() {
                 h("td", { "data-label": "Sorrend" }, h(NumberCell, { className: "cell-order", value: c.order, onSave: v => updateItem(c.id, { order: v }) })),
                 h("td", { "data-label": "Név" }, h(TextCell, { className: "cell-name", value: c.name, onSave: v => updateItem(c.id, { name: v }) })),
                 h("td", { "data-label": "Megjegyzés" }, h(TextCell, { value: c.note ?? "", placeholder: "pl. 32 cm", onSave: v => updateItem(c.id, { note: v }) })),
-                h("td", { className: "cell-actions" }, h("button", { className: "icon-btn", title: "Törlés", onClick: () => { if(confirm(`Törlöd: "${c.name}"?`)) removeItem(c.id); } }, "✕ Törlés"))
+                h("td", { className: "cell-actions" }, h("button", { className: "icon-btn", title: "Törlés", onClick: () => { if(confirm(`Törlöd: "${c.name}"?`)) removeItem(c.id); } }, "✕", h("span", { className: "btn-label" }, " Törlés")))
               )
             ))
           )
@@ -258,7 +258,7 @@ function ReviewsPage() {
                 h("td", { "data-label": "Vélemény" }, h(TextCell, { className: "cell-desc", value: r.text, onSave: v => updateItem(r.id, { text: v }) })),
                 h("td", { className: "cell-checkbox", "data-label": "Ajánlja" }, h(CheckboxCell, { checked: r.recommends, onSave: v => updateItem(r.id, { recommends: v }) })),
                 h("td", { className: "cell-checkbox", "data-label": "Látható" }, h(CheckboxCell, { checked: r.visible, onSave: v => updateItem(r.id, { visible: v }) })),
-                h("td", { className: "cell-actions" }, h("button", { className: "icon-btn", title: "Törlés", onClick: () => { if(confirm(`Törlöd: "${r.name}"?`)) removeItem(r.id); } }, "✕ Törlés"))
+                h("td", { className: "cell-actions" }, h("button", { className: "icon-btn", title: "Törlés", onClick: () => { if(confirm(`Törlöd: "${r.name}"?`)) removeItem(r.id); } }, "✕", h("span", { className: "btn-label" }, " Törlés")))
               )
             ))
           )
