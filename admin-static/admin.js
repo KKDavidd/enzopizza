@@ -101,6 +101,31 @@ function AllergenChipsCell({ selected, onSave }) {
   );
 }
 
+function SortableTh({ label, sortKey, sort, setSort, className }) {
+  const active = sort.key === sortKey;
+  function handleClick() {
+    setSort(s => (s.key === sortKey ? { key: sortKey, dir: s.dir === "asc" ? "desc" : "asc" } : { key: sortKey, dir: "asc" }));
+  }
+  return h("th", { className: className ?? "" },
+    h("button", { type: "button", className: `th-sort-btn ${active ? "active" : ""}`, onClick: handleClick },
+      label,
+      h("span", { className: "sort-arrow", "aria-hidden": "true" }, active ? (sort.dir === "asc" ? "▲" : "▼") : "↕")
+    )
+  );
+}
+
+function sortRows(rows, sort, getters) {
+  const getter = getters[sort.key] ?? getters.default;
+  const factor = sort.dir === "desc" ? -1 : 1;
+  return [...rows].sort((a, b) => {
+    const av = getter(a), bv = getter(b);
+    if (typeof av === "string" || typeof bv === "string") {
+      return factor * String(av ?? "").localeCompare(String(bv ?? ""), "hu", { numeric: true, sensitivity: "base" });
+    }
+    return factor * ((av ?? 0) - (bv ?? 0));
+  });
+}
+
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -139,12 +164,25 @@ function ProductsPage() {
   const { items: categories } = useCollection("categories");
   const { items: products, loading, error, addItem, updateItem, removeItem } = useCollection("products");
   const catOptions = categories.map(c => ({ value: c.id, label: c.name }));
+  const catNameById = Object.fromEntries(categories.map(c => [c.id, c.name]));
+  const [sort, setSort] = useState({ key: "order", dir: "asc" });
 
   async function handleAdd() {
     await addItem({ name: "Új termék", description: "", price: 0, categoryId: categories[0]?.id ?? "", allergens: [], order: (products.length ? Math.max(...products.map(p => p.order ?? 0)) : 0) + 1, active: true });
   }
 
   if (loading) return h("p", { className: "empty-state" }, "Betöltés…");
+
+  const sortedProducts = sortRows(products, sort, {
+    order: p => p.order ?? 0,
+    name: p => p.name ?? "",
+    category: p => catNameById[p.categoryId] ?? "",
+    description: p => p.description ?? "",
+    price: p => p.price ?? 0,
+    allergens: p => (p.allergens ?? []).length,
+    active: p => (p.active ? 1 : 0),
+    default: p => p.order ?? 0
+  });
 
   return h("div", null,
     h("div", { className: "page-head" }, h("div", null, h("h1", null, "Termékek"), h("p", { className: "page-sub" }, "A menü összes étele. Kattints a cellába a szerkesztéshez."))),
@@ -158,16 +196,16 @@ function ProductsPage() {
       : h("div", { className: "table-wrap" },
           h("table", { className: "data-table" },
             h("thead", null, h("tr", null,
-              h("th", { className: "cell-order" }, "Sorrend"),
-              h("th", { className: "cell-name" }, "Név"),
-              h("th", null, "Kategória"),
-              h("th", { className: "cell-desc" }, "Leírás"),
-              h("th", { className: "cell-price" }, "Ár (Ft)"),
-              h("th", { className: "cell-allergens" }, "Allergének"),
-              h("th", { className: "cell-checkbox" }, "Aktív"),
+              h(SortableTh, { label: "Sorrend", sortKey: "order", sort, setSort, className: "cell-order" }),
+              h(SortableTh, { label: "Név", sortKey: "name", sort, setSort, className: "cell-name" }),
+              h(SortableTh, { label: "Kategória", sortKey: "category", sort, setSort }),
+              h(SortableTh, { label: "Leírás", sortKey: "description", sort, setSort, className: "cell-desc" }),
+              h(SortableTh, { label: "Ár (Ft)", sortKey: "price", sort, setSort, className: "cell-price" }),
+              h(SortableTh, { label: "Allergének", sortKey: "allergens", sort, setSort, className: "cell-allergens" }),
+              h(SortableTh, { label: "Aktív", sortKey: "active", sort, setSort, className: "cell-checkbox" }),
               h("th", { className: "cell-actions" })
             )),
-            h("tbody", null, ...products.map(p =>
+            h("tbody", null, ...sortedProducts.map(p =>
               h("tr", { key: p.id, className: p.active ? "" : "row-inactive" },
                 h("td", { "data-label": "Sorrend" }, h(NumberCell, { className: "cell-order", value: p.order, onSave: v => updateItem(p.id, { order: v }) })),
                 h("td", { "data-label": "Név" }, h(TextCell, { className: "cell-name", value: p.name, onSave: v => updateItem(p.id, { name: v }) })),
@@ -186,12 +224,20 @@ function ProductsPage() {
 
 function CategoriesPage() {
   const { items, loading, error, addItem, updateItem, removeItem } = useCollection("categories");
+  const [sort, setSort] = useState({ key: "order", dir: "asc" });
 
   async function handleAdd() {
     await addItem({ name: "Új kategória", note: "", order: (items.length ? Math.max(...items.map(c => c.order ?? 0)) : 0) + 1 });
   }
 
   if (loading) return h("p", { className: "empty-state" }, "Betöltés…");
+
+  const sortedItems = sortRows(items, sort, {
+    order: c => c.order ?? 0,
+    name: c => c.name ?? "",
+    note: c => c.note ?? "",
+    default: c => c.order ?? 0
+  });
 
   return h("div", null,
     h("div", { className: "page-head" }, h("div", null, h("h1", null, "Kategóriák"), h("p", { className: "page-sub" }, "A menü fő szekciói és a megjelenési sorrendjük."))),
@@ -205,12 +251,12 @@ function CategoriesPage() {
       : h("div", { className: "table-wrap" },
           h("table", { className: "data-table" },
             h("thead", null, h("tr", null,
-              h("th", { className: "cell-order" }, "Sorrend"),
-              h("th", { className: "cell-name" }, "Név"),
-              h("th", null, "Megjegyzés"),
+              h(SortableTh, { label: "Sorrend", sortKey: "order", sort, setSort, className: "cell-order" }),
+              h(SortableTh, { label: "Név", sortKey: "name", sort, setSort, className: "cell-name" }),
+              h(SortableTh, { label: "Megjegyzés", sortKey: "note", sort, setSort }),
               h("th", { className: "cell-actions" })
             )),
-            h("tbody", null, ...items.map(c =>
+            h("tbody", null, ...sortedItems.map(c =>
               h("tr", { key: c.id },
                 h("td", { "data-label": "Sorrend" }, h(NumberCell, { className: "cell-order", value: c.order, onSave: v => updateItem(c.id, { order: v }) })),
                 h("td", { "data-label": "Név" }, h(TextCell, { className: "cell-name", value: c.name, onSave: v => updateItem(c.id, { name: v }) })),
@@ -225,12 +271,22 @@ function CategoriesPage() {
 
 function ReviewsPage() {
   const { items, loading, error, addItem, updateItem, removeItem } = useCollection("reviews");
+  const [sort, setSort] = useState({ key: "order", dir: "asc" });
 
   async function handleAdd() {
     await addItem({ name: "Új vendég", text: "", recommends: true, visible: true, order: (items.length ? Math.max(...items.map(r => r.order ?? 0)) : 0) + 1 });
   }
 
   if (loading) return h("p", { className: "empty-state" }, "Betöltés…");
+
+  const sortedItems = sortRows(items, sort, {
+    order: r => r.order ?? 0,
+    name: r => r.name ?? "",
+    text: r => r.text ?? "",
+    recommends: r => (r.recommends !== false ? 1 : 0),
+    visible: r => (r.visible !== false ? 1 : 0),
+    default: r => r.order ?? 0
+  });
 
   return h("div", null,
     h("div", { className: "page-head" }, h("div", null, h("h1", null, "Vélemények"), h("p", { className: "page-sub" }, "Vendégvélemények a weboldal Vélemények szekciójához."))),
@@ -244,14 +300,14 @@ function ReviewsPage() {
       : h("div", { className: "table-wrap" },
           h("table", { className: "data-table" },
             h("thead", null, h("tr", null,
-              h("th", { className: "cell-order" }, "Sorrend"),
-              h("th", { className: "cell-name" }, "Név"),
-              h("th", { className: "cell-desc" }, "Vélemény"),
-              h("th", { className: "cell-checkbox" }, "Ajánlja"),
-              h("th", { className: "cell-checkbox" }, "Látható"),
+              h(SortableTh, { label: "Sorrend", sortKey: "order", sort, setSort, className: "cell-order" }),
+              h(SortableTh, { label: "Név", sortKey: "name", sort, setSort, className: "cell-name" }),
+              h(SortableTh, { label: "Vélemény", sortKey: "text", sort, setSort, className: "cell-desc" }),
+              h(SortableTh, { label: "Ajánlja", sortKey: "recommends", sort, setSort, className: "cell-checkbox" }),
+              h(SortableTh, { label: "Látható", sortKey: "visible", sort, setSort, className: "cell-checkbox" }),
               h("th", { className: "cell-actions" })
             )),
-            h("tbody", null, ...items.map(r =>
+            h("tbody", null, ...sortedItems.map(r =>
               h("tr", { key: r.id, className: r.visible ? "" : "row-inactive" },
                 h("td", { "data-label": "Sorrend" }, h(NumberCell, { className: "cell-order", value: r.order, onSave: v => updateItem(r.id, { order: v }) })),
                 h("td", { "data-label": "Név" }, h(TextCell, { className: "cell-name", value: r.name, onSave: v => updateItem(r.id, { name: v }) })),

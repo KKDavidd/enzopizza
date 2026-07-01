@@ -41,7 +41,13 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--c
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .table-wrap { overflow-x: auto; border: 1px solid var(--color-char-line); border-radius: var(--radius); }
 table.data-table { width: 100%; border-collapse: collapse; background: var(--color-char-soft); font-size: 0.92rem; }
-.data-table th { text-align: left; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-cheese); font-weight: 700; padding: 0.85rem 0.9rem; border-bottom: 1px solid var(--color-char-line); white-space: nowrap; }
+.data-table th { text-align: left; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-cheese); font-weight: 700; padding: 0; border-bottom: 1px solid var(--color-char-line); white-space: nowrap; }
+.th-sort-btn { display: flex; align-items: center; gap: 0.35rem; width: 100%; background: none; border: none; color: inherit; font: inherit; text-transform: inherit; letter-spacing: inherit; padding: 0.85rem 0.9rem; cursor: pointer; }
+.th-sort-btn:hover { color: var(--color-cream); }
+.th-sort-btn.active { color: var(--color-tomato); }
+.th-sort-btn .sort-arrow { font-size: 0.7em; opacity: 0.55; }
+.th-sort-btn.active .sort-arrow { opacity: 1; }
+.cell-checkbox .th-sort-btn { justify-content: center; }
 .data-table td { padding: 0.75rem 0.9rem; border-bottom: 1px solid var(--color-char-line); vertical-align: middle; line-height: 1.35; }
 .data-table tbody tr:nth-child(even) { background: rgba(255,255,255,0.018); }
 .data-table tr:last-child td { border-bottom: none; }
